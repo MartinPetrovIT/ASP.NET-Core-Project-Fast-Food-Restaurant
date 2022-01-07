@@ -22,16 +22,12 @@ namespace FastFoodRestaurant.Data
         {
             public const int maxDrinkNameLength = 20;
             public const int minDrinkNameLength = 3;
+            public const double maxPrice = 1000.00;
+            public const double minPrice = 0.00;
 
 
         }
-        public class Ingredient
-        {
-            public const int maxIngredientNameLength = 20;
-            public const int minIngredientNameLength = 3;
-
-
-        }
+      
         public class Dessert
         {
             public const int maxDessertNameLength = 20;

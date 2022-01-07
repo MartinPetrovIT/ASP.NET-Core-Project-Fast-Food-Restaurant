@@ -21,21 +21,12 @@ namespace FastFoodRestaurant.Data.Models
 
         [Required]
         public string Description { get; set; }
-
-        [Required]  
+ 
         public decimal Price { get; set; }
 
         public int CategoryId { get; set; }
      
         public FoodCategory Category { get; set; }
-
-     
-        public  List<FoodIngredient> FoodIngredients { get; set; } = new List<FoodIngredient>();
-
-       
-        public int SpicyLevel => this.FoodIngredients.Select(x => x.Ingredient.IsSpicy == true).Count();
-        //int spacy level
-        //category
 
     }
 }

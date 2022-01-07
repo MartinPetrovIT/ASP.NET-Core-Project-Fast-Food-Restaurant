@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FastFoodRestaurant.Models.FoodCategory;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -17,14 +18,20 @@ namespace FastFoodRestaurant.Models.Food
         [Url]
         public string ImageUrl { get; set; }
 
-        [Required]
-        [Range(minDescriptionLength, maxDescriptionLength)]
-        public string Description { get; set; }
 
         [Required]
         [Range(minPrice,maxPrice)]
         public decimal Price { get; set; }
 
-        public List<string> Ingredients { get; set; } = new List<string>();
+        [Required]
+        [Range(minDescriptionLength, maxDescriptionLength)]
+        public string Description { get; set; }
+
+        [Display(Name = "Category")]
+        public int CategoryId { get; init; }
+
+        public IEnumerable<FoodCategoryModel> Categories { get; set; }
+
+
     }
 }

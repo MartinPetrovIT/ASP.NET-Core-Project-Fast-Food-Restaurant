@@ -21,8 +21,7 @@ namespace FastFoodRestaurant.Infrastructure
             var data = scopedServices.ServiceProvider.GetService<ApplicationDbContext>();
             data.Database.Migrate();
 
-            //SeedCategories(data);
-            //SeedIngredients(data);
+            SeedCategories(data);
        
             return app;
         }
@@ -39,8 +38,7 @@ namespace FastFoodRestaurant.Infrastructure
                 new FoodCategory {Name = "Pizzas" },
                 new FoodCategory {Name = "Burgers" },
                 new FoodCategory {Name = "Chickens" },
-                new FoodCategory {Name = "Fishes" },
-                new FoodCategory {Name = "Pastas" },
+                new FoodCategory {Name = "Pasta" },
                 new FoodCategory {Name = "Salads" },
                 new FoodCategory {Name = "Starters" }
 
@@ -51,41 +49,6 @@ namespace FastFoodRestaurant.Infrastructure
             data.SaveChanges();
         }
 
-        private static void SeedIngredients(ApplicationDbContext data)
-        {
-            if (data.Ingredients.Any())
-            {
-                return;
-            }
-
-            data.Ingredients.AddRange(new[]
-            {
-                new Ingredient { Name = "tomatoes" , IsSpicy = false },
-                new Ingredient { Name = "green peppers" , IsSpicy = false },
-                new Ingredient { Name = "onions" , IsSpicy = true },
-                new Ingredient { Name = "jalapeno peppers" , IsSpicy = true },
-                new Ingredient { Name = "yellow cheese" , IsSpicy = false },
-                new Ingredient { Name = "white cheese" , IsSpicy = false },
-                new Ingredient { Name = "iceberg lettuce" , IsSpicy = false },
-                new Ingredient { Name = "croutons" , IsSpicy = false },
-                new Ingredient { Name = "corn" , IsSpicy = false },
-                new Ingredient { Name = "chicken" , IsSpicy = false },
-                new Ingredient { Name = "bacon" , IsSpicy = false },
-                new Ingredient { Name = "Caesar dressing" , IsSpicy = false },
-                new Ingredient { Name = "tuna" , IsSpicy = false },
-                new Ingredient { Name = "olives" , IsSpicy = false },
-                new Ingredient { Name = "olive oil" , IsSpicy = false },
-                new Ingredient { Name = "tomato sauce" , IsSpicy = false },
-                new Ingredient { Name = "mozzarella" , IsSpicy = false },
-                new Ingredient { Name = "pepperoni" , IsSpicy = false },
-                new Ingredient { Name = "spicy beef" , IsSpicy = true },
-                new Ingredient { Name = "barbecue sauce" , IsSpicy = false },
-                new Ingredient { Name = "pineapple" , IsSpicy = false },
-                new Ingredient { Name = "ham" , IsSpicy = false },
-
-            });
-
-            data.SaveChanges();
-        }
+        
     }
 }

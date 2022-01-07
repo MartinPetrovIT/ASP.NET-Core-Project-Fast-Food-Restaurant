@@ -40,7 +40,7 @@ namespace FastFoodResturant.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sweets");
+                    b.ToTable("Desserts");
                 });
 
             modelBuilder.Entity("FastFoodRestaurant.Data.Models.Drink", b =>
@@ -111,46 +111,13 @@ namespace FastFoodResturant.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FoodCategories");
-                });
-
-            modelBuilder.Entity("FastFoodRestaurant.Data.Models.FoodIngredient", b =>
-                {
-                    b.Property<int>("FoodId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IngredientId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FoodId", "IngredientId");
-
-                    b.HasIndex("IngredientId");
-
-                    b.ToTable("FoodIngredients");
-                });
-
-            modelBuilder.Entity("FastFoodRestaurant.Data.Models.Ingredient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("IsSpicy")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("FoodCategories");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -364,25 +331,6 @@ namespace FastFoodResturant.Data.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("FastFoodRestaurant.Data.Models.FoodIngredient", b =>
-                {
-                    b.HasOne("FastFoodRestaurant.Data.Models.Food", "Food")
-                        .WithMany("Ingredients")
-                        .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FastFoodRestaurant.Data.Models.Ingredient", "Ingredient")
-                        .WithMany("Foods")
-                        .HasForeignKey("IngredientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Food");
-
-                    b.Navigation("Ingredient");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -434,17 +382,7 @@ namespace FastFoodResturant.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FastFoodRestaurant.Data.Models.Food", b =>
-                {
-                    b.Navigation("Ingredients");
-                });
-
             modelBuilder.Entity("FastFoodRestaurant.Data.Models.FoodCategory", b =>
-                {
-                    b.Navigation("Foods");
-                });
-
-            modelBuilder.Entity("FastFoodRestaurant.Data.Models.Ingredient", b =>
                 {
                     b.Navigation("Foods");
                 });
