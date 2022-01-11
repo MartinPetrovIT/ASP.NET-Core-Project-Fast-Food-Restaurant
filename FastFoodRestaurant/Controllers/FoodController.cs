@@ -34,6 +34,7 @@ namespace FastFoodRestaurant.Controllers
             }
             if (!ModelState.IsValid)
             {
+                foodFromModel.Categories = this.GetFoodCategories();
                 return View(foodFromModel);
             }
 
@@ -43,14 +44,31 @@ namespace FastFoodRestaurant.Controllers
                 ImageUrl = foodFromModel.ImageUrl,
                 Price = foodFromModel.Price,
                 Description = foodFromModel.Description,
-
+                CategoryId = foodFromModel.CategoryId
 
             };
 
+            data.Foods.Add(food);
+
+            data.SaveChanges();
 
             return RedirectToAction("Index" , "Home");
         }
 
+        public IActionResult All()
+        {
+            var foods = data.Foods.Select(x => new FoodListingModel
+            {
+                Name = x.Name,
+                ImageUrl = x.ImageUrl,
+                Price = x.Price,
+                Description = x.Description,
+                Category = x.Category.Name
+
+            }).ToList();
+
+            return View(foods);
+        }
 
         private IEnumerable<FoodCategoryModel> GetFoodCategories()
         {
@@ -64,6 +82,8 @@ namespace FastFoodRestaurant.Controllers
 
             return categories;
         }
+
+
 
 
 

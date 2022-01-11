@@ -11,11 +11,12 @@ namespace FastFoodRestaurant.Models.Food
     public class AddFoodModel
     {
         [Required]
-        [Range(minFoodNameLength,maxFoodNameLength)]
+        [StringLength(maxFoodNameLength, MinimumLength = minFoodNameLength)]
         public string Name { get; set; }
 
         [Required]
         [Url]
+        [Display(Name = "Image Url")]
         public string ImageUrl { get; set; }
 
 
@@ -24,7 +25,7 @@ namespace FastFoodRestaurant.Models.Food
         public decimal Price { get; set; }
 
         [Required]
-        [Range(minDescriptionLength, maxDescriptionLength)]
+        [StringLength(maxDescriptionLength, MinimumLength = minDescriptionLength)]
         public string Description { get; set; }
 
         [Display(Name = "Category")]

@@ -17,7 +17,6 @@ namespace FastFoodResturant.Data
         public DbSet<Food> Foods { get; set; }
         public DbSet<Drink> Drinks { get; set; }
         public DbSet<FoodCategory> FoodCategories { get; set; }
-        public DbSet<Dessert> Desserts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -32,7 +31,6 @@ namespace FastFoodResturant.Data
 
            builder.Entity<Food>().Property("Price").HasColumnType("decimal(5, 2)");
            builder.Entity<Drink>().Property("Price").HasColumnType("decimal(5, 2)");
-           builder.Entity<Dessert>().Property("Price").HasColumnType("decimal(5, 2)");
 
 
 

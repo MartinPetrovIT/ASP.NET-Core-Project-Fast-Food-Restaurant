@@ -28,10 +28,10 @@ namespace FastFoodRestaurant.Infrastructure
 
         private static void SeedCategories(ApplicationDbContext data)
         {
-           if (data.FoodCategories.Any())
-           {
-               return;
-           }
+            if (data.FoodCategories.Any())
+            {
+                return;
+            }
 
             data.FoodCategories.AddRange(new[]
             {
@@ -40,7 +40,8 @@ namespace FastFoodRestaurant.Infrastructure
                 new FoodCategory {Name = "Chickens" },
                 new FoodCategory {Name = "Pasta" },
                 new FoodCategory {Name = "Salads" },
-                new FoodCategory {Name = "Starters" }
+                new FoodCategory {Name = "Starters" },
+                new FoodCategory {Name = "Desserts" }
 
 
 

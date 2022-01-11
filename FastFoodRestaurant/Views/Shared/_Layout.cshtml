@@ -11,28 +11,30 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">FastFoodResturant</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Fast Food Resturant</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Add
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Dessert" asp-action="Add">Add Dessert</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Drink" asp-action="Add">Add Drink</a>
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Food" asp-action="Add">Food</a>
-                                </div>
+                      
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark waves-effect waves-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-hidden="true">
+                                Add
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Drink" asp-action="Add">Drink</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Food" asp-action="Add">Food</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Food" asp-action="All">Listing</a>
+
+
                             </div>
+
                         </li>
+
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -47,7 +49,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; @DateTime.UtcNow.Year - FastFoodResturant - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.UtcNow.Year
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
