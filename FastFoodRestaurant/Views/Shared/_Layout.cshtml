@@ -18,8 +18,13 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                      
 
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Food" asp-action="All">Menu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Drink" asp-action="All">Drinks</a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-dark waves-effect waves-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-hidden="true">
                                 Add
@@ -28,9 +33,6 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Drink" asp-action="Add">Drink</a>
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Food" asp-action="Add">Food</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Food" asp-action="All">Listing</a>
-
-
                             </div>
 
                         </li>

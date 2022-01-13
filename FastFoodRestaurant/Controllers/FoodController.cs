@@ -55,9 +55,39 @@ namespace FastFoodRestaurant.Controllers
             return RedirectToAction("Index" , "Home");
         }
 
-        public IActionResult All()
+        public IActionResult All([FromQuery]FoodSearchModel query)
         {
-            var foods = data.Foods.Select(x => new FoodListingModel
+            var foodQuery = data.Foods.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
+                foodQuery = foodQuery.Where(f =>
+                f.Name.ToLower().Contains(query.SearchTerm.ToLower()) ||
+                f.Description.ToLower().Contains(query.SearchTerm.ToLower()) ||
+                f.Category.Name.ToLower().Contains(query.SearchTerm.ToLower()) 
+                );
+                
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Category))
+            {
+                foodQuery = foodQuery.Where(c => c.Category.Name == query.Category);
+
+            }
+            
+            foodQuery = query.Sorting switch
+            {
+                FoodSorting.PriceAcsending => foodQuery.OrderBy(x => x.Price),
+                FoodSorting.PriceDescending => foodQuery.OrderByDescending(x => x.Price),
+                _ => foodQuery
+
+            };
+
+            var totalFood = foodQuery.Count();
+
+            var foods = foodQuery
+                .Skip((query.CurrentPage - 1) * FoodSearchModel.EntityPerPage)
+                .Take(FoodSearchModel.EntityPerPage)
+                .Select(x => new FoodListingModel
             {
                 Name = x.Name,
                 ImageUrl = x.ImageUrl,
@@ -67,7 +97,13 @@ namespace FastFoodRestaurant.Controllers
 
             }).ToList();
 
-            return View(foods);
+            var foodCategories = data.FoodCategories.Select(x => x.Name);
+
+
+            query.Categories = foodCategories;
+            query.Food = foods;
+            query.TotalFood = totalFood;
+            return View(query);
         }
 
         private IEnumerable<FoodCategoryModel> GetFoodCategories()

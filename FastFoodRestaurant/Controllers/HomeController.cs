@@ -32,8 +32,7 @@ namespace FastFoodResturant.Controllers
             {
                 Name = x.Name,
                 ImageUrl = x.ImageUrl,
-                Price = x.Price,
-                Description = x.Description
+                Price = x.Price
 
             }).Take(3).ToList();
 
