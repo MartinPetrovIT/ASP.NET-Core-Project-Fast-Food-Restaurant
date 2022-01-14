@@ -45,5 +45,16 @@ namespace FastFoodRestaurant.Data
 
 
         }
+
+        public class Client
+        {
+            public const string phoneNumberRegEx = @"^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$";
+            public const int phoneNumberMaxLength = 20;
+            public const int maxClientNameLength = 30;
+            public const int minClientNameLength = 3;
+            public const int minAddressLength = 3;
+            public const int maxAddressLength = 120;
+            public const int maxEmailLength = 100;
+        }
     }
 }

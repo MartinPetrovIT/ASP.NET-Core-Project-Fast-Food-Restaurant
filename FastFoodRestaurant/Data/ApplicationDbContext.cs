@@ -1,4 +1,5 @@
 ﻿using FastFoodRestaurant.Data.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,7 +16,13 @@ namespace FastFoodResturant.Data
         }
 
         public DbSet<Food> Foods { get; set; }
+
         public DbSet<Drink> Drinks { get; set; }
+
+        public DbSet<Cart> Carts { get; set; }
+
+        public DbSet<Client> Clients { get; set; }
+
         public DbSet<FoodCategory> FoodCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -27,9 +34,22 @@ namespace FastFoodResturant.Data
                 .HasForeignKey(c => c.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            
+            builder
+              .Entity<Client>()
+              .HasOne<IdentityUser>()
+              .WithOne()
+              .HasForeignKey<Client>(d => d.UserId);
 
-           builder.Entity<Food>().Property("Price").HasColumnType("decimal(5, 2)");
+            builder
+             .Entity<Client>()
+             .HasOne<Cart>()
+             .WithOne()
+             .HasForeignKey<Client>(d => d.CartId);
+
+
+
+
+            builder.Entity<Food>().Property("Price").HasColumnType("decimal(5, 2)");
            builder.Entity<Drink>().Property("Price").HasColumnType("decimal(5, 2)");
 
 

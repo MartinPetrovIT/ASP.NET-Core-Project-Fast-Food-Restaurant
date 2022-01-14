@@ -22,5 +22,7 @@ namespace FastFoodRestaurant.Data.Models
         public decimal Price { get; set; }
 
         public bool IsAlcoholic { get; init; }
+
+       
     }
 }

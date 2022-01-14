@@ -19,12 +19,74 @@ namespace FastFoodResturant.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("FastFoodRestaurant.Data.Models.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("FastFoodRestaurant.Data.Models.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CartId1")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId")
+                        .IsUnique();
+
+                    b.HasIndex("CartId1")
+                        .IsUnique()
+                        .HasFilter("[CartId1] IS NOT NULL");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
+                    b.ToTable("Clients");
+                });
+
             modelBuilder.Entity("FastFoodRestaurant.Data.Models.Drink", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CartId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -43,6 +105,8 @@ namespace FastFoodResturant.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CartId");
+
                     b.ToTable("Drinks");
                 });
 
@@ -52,6 +116,9 @@ namespace FastFoodResturant.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CartId")
+                        .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -73,6 +140,8 @@ namespace FastFoodResturant.Data.Migrations
                         .HasColumnType("decimal(5,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CartId");
 
                     b.HasIndex("CategoryId");
 
@@ -296,8 +365,38 @@ namespace FastFoodResturant.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("FastFoodRestaurant.Data.Models.Client", b =>
+                {
+                    b.HasOne("FastFoodRestaurant.Data.Models.Cart", null)
+                        .WithOne()
+                        .HasForeignKey("FastFoodRestaurant.Data.Models.Client", "CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FastFoodRestaurant.Data.Models.Cart", "Cart")
+                        .WithOne("Client")
+                        .HasForeignKey("FastFoodRestaurant.Data.Models.Client", "CartId1");
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithOne()
+                        .HasForeignKey("FastFoodRestaurant.Data.Models.Client", "UserId");
+
+                    b.Navigation("Cart");
+                });
+
+            modelBuilder.Entity("FastFoodRestaurant.Data.Models.Drink", b =>
+                {
+                    b.HasOne("FastFoodRestaurant.Data.Models.Cart", null)
+                        .WithMany("Drinks")
+                        .HasForeignKey("CartId");
+                });
+
             modelBuilder.Entity("FastFoodRestaurant.Data.Models.Food", b =>
                 {
+                    b.HasOne("FastFoodRestaurant.Data.Models.Cart", null)
+                        .WithMany("Foods")
+                        .HasForeignKey("CartId");
+
                     b.HasOne("FastFoodRestaurant.Data.Models.FoodCategory", "Category")
                         .WithMany("Foods")
                         .HasForeignKey("CategoryId")
@@ -356,6 +455,15 @@ namespace FastFoodResturant.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FastFoodRestaurant.Data.Models.Cart", b =>
+                {
+                    b.Navigation("Client");
+
+                    b.Navigation("Drinks");
+
+                    b.Navigation("Foods");
                 });
 
             modelBuilder.Entity("FastFoodRestaurant.Data.Models.FoodCategory", b =>
