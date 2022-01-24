@@ -2,6 +2,7 @@
 using FastFoodRestaurant.Models.Food;
 using FastFoodRestaurant.Models.FoodCategory;
 using FastFoodResturant.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace FastFoodRestaurant.Controllers
         }
         private readonly ApplicationDbContext data;
 
+        [Authorize]
         public IActionResult Add()
         {
             
@@ -26,6 +28,7 @@ namespace FastFoodRestaurant.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Add(AddFoodModel foodFromModel)
         {
             if (!this.data.FoodCategories.Any(c => c.Id == foodFromModel.CategoryId))
@@ -38,18 +41,29 @@ namespace FastFoodRestaurant.Controllers
                 return View(foodFromModel);
             }
 
+            var item = new Item()
+            {
+               Name = foodFromModel.Name,
+               Price = foodFromModel.Price
+
+            };
+           
+
             var food = new Food()
             {
                 Name = foodFromModel.Name,
                 ImageUrl = foodFromModel.ImageUrl,
                 Price = foodFromModel.Price,
                 Description = foodFromModel.Description,
-                CategoryId = foodFromModel.CategoryId
+                CategoryId = foodFromModel.CategoryId,
+                ItemId = item.Id
 
             };
 
-            data.Foods.Add(food);
+         
 
+            data.Items.Add(item);
+            data.Foods.Add(food);
             data.SaveChanges();
 
             return RedirectToAction("Index" , "Home");
@@ -105,6 +119,9 @@ namespace FastFoodRestaurant.Controllers
             query.TotalFood = totalFood;
             return View(query);
         }
+
+
+        
 
         private IEnumerable<FoodCategoryModel> GetFoodCategories()
         {

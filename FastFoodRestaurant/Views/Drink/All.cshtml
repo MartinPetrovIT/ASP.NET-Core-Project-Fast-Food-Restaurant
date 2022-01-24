@@ -1,0 +1,62 @@
+﻿@model DrinkSearchModel
+<form method="get">
+
+    @{
+        ViewData["Title"] = "Drinks";
+    }
+
+    <div class="row">
+
+        <div class="col-md-4  mb-3 mt-1 offset-1">
+            <div class="form-group">
+                <label asp-for="SearchTerm"></label>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Cola">
+            </div>
+        </div>
+
+        <style>
+            .form-inline {
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-flow: row wrap;
+                flex-flow: row wrap;
+                -ms-flex-align: center;
+                align-items: center;
+            }
+        </style>
+
+        <div class="form-inline">
+            <input class="btn btn-primary float-right mt-1" style="height:40px;width:100px" type="submit" value="Search" />
+        </div>
+    </div>
+
+</form>
+
+
+
+<div class="row">
+    @foreach (var drink in Model.Drink)
+    {
+        <div class="col-md-3 mb-1">
+            <div class="card">
+                <img height="200" width="100" class="card-img-top" src="@drink.ImageUrl" alt="Card image cap">
+                <div class="card-body">
+                    @if (drink.IsAlcoholic == true)
+                    {
+                    <h5 class="card-title">@drink.Name - (Alcoholic drink)</h5>
+                    }
+                    else
+                    {
+                            
+                    <h5 class="card-title">@drink.Name</h5>
+                    }
+                    <h6 class="card-subtitle mb-2 text-muted">@drink.Price Leva!</h6>
+                    <a asp-controller="Food" asp-action="Order" class="btn btn-primary">Order now</a>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+
+

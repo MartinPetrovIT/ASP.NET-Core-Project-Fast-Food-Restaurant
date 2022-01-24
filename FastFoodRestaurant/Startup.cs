@@ -1,3 +1,4 @@
+using FastFoodRestaurant.Data.Models;
 using FastFoodRestaurant.Infrastructure;
 using FastFoodResturant.Data;
 using Microsoft.AspNetCore.Builder;
@@ -35,7 +36,9 @@ namespace FastFoodResturant
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddDefaultIdentity<IdentityUser>
+           
+
+            services.AddDefaultIdentity<Client>
                 (options =>
                 {
                     options.Password.RequireLowercase = false;

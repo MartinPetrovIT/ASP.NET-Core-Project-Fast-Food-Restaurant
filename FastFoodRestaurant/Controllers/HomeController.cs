@@ -30,14 +30,15 @@ namespace FastFoodResturant.Controllers
         {
             var foods = data.Foods.OrderByDescending(x => x.Id).Select(x => new HomeListingFoodModel
             {
+                Id = x.Id,
                 Name = x.Name,
                 ImageUrl = x.ImageUrl,
-                Price = x.Price
-
+                Price = x.Price,
+                ItemId = x.ItemId
             }).Take(3).ToList();
 
             return View(foods);
-        }
+            }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

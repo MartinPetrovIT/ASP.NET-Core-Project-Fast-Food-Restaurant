@@ -1,0 +1,36 @@
+﻿@model OrderListingModel
+
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+
+<div class="row">
+    <div class="col-md-8 offset-2 mt-4">
+        <h2 class="heading-margin text-center">Order Details</h2>
+
+        <ul class="list-group">
+
+            @foreach (var item in Model.Items)
+            {
+
+            <li class="list-group-item text-center">
+                <input asp-controller="Order" asp-action="AddItemQuantity" asp-route-orderId="@Model.Id" asp-route-itemId="@item.Id" class="btn btn-primary float-left" type="submit" value="-" />
+                @item.Name - @item.Quantity - @(item.Price * item.Quantity) leva!
+                <input asp-controller="Order" asp-action="AddItemQuantity" asp-route-orderId="@Model.Id" asp-route-itemId="@item.Id" class="btn btn-danger float-right offset-sm-1" type="submit" value="Remove" />
+
+                <input asp-controller="Order" asp-action="AddItemQuantity" asp-route-orderId="@Model.Id" asp-route-itemId="@item.Id" class="btn btn-primary float-right" type="submit" value="+" />
+            </li>
+
+            }
+
+        <li class="list-group-item float-left">
+            Price: <h3>@Model.TotalSum leva!</h3>
+            <input  class="btn btn-primary float-right" type="submit" value="Complete order!" />
+        </li>
+        </ul>
+
+
+    </div>
+</div>

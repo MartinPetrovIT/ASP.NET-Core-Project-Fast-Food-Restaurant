@@ -4,28 +4,22 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using static FastFoodRestaurant.Data.DataConstants.Drink;
-namespace FastFoodRestaurant.Data.Models
+namespace FastFoodRestaurant.Models.Drink
 {
-    public class Drink
+    public class AddDrinkModel
     {
-        public int Id { get; init; }
-
         [Required]
-        [MaxLength(maxDrinkNameLength)]
+        [StringLength(maxDrinkNameLength, MinimumLength = minDrinkNameLength)]
         public string Name { get; set; }
 
         [Required]
         [Url]
+        [Display(Name = "Image Url")]
         public string ImageUrl { get; set; }
 
-
+        [Range(minPrice,maxPrice)]
         public decimal Price { get; set; }
 
         public bool IsAlcoholic { get; init; }
-
-        public Item Item { get; set; }
-
-        public int ItemId { get; set; }
-
     }
 }
