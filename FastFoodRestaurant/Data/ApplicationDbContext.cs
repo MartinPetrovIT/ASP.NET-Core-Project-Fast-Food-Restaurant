@@ -41,7 +41,7 @@ namespace FastFoodResturant.Data
             builder.Entity<OrderItem>()
        .HasKey(oi => new { oi.OrderId, oi.ItemId });
 
-
+        
 
             builder.Entity<Food>().Property("Price").HasColumnType("decimal(5, 2)");
            builder.Entity<Drink>().Property("Price").HasColumnType("decimal(5, 2)");

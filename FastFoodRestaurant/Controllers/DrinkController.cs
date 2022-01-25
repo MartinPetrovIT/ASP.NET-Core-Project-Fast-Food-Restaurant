@@ -40,6 +40,8 @@ namespace FastFoodRestaurant.Controllers
                 Name = drinkFromModel.Name,
                 Price = drinkFromModel.Price
             };
+            data.Items.Add(item);
+            data.SaveChanges();
 
             var drink = new Drink()
             {
@@ -52,7 +54,7 @@ namespace FastFoodRestaurant.Controllers
             };
 
 
-            data.Items.Add(item);
+          
             data.Drinks.Add(drink);
           
 

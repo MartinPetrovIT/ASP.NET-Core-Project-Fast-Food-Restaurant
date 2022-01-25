@@ -5,6 +5,17 @@
         ViewData["Title"] = "Drinks";
     }
 
+    <style>
+        .form-inline {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+    </style>
+
     <div class="row">
 
         <div class="col-md-4  mb-3 mt-1 offset-1">
@@ -14,21 +25,13 @@
             </div>
         </div>
 
-        <style>
-            .form-inline {
-                display: -ms-flexbox;
-                display: flex;
-                -ms-flex-flow: row wrap;
-                flex-flow: row wrap;
-                -ms-flex-align: center;
-                align-items: center;
-            }
-        </style>
+
 
         <div class="form-inline">
             <input class="btn btn-primary float-right mt-1" style="height:40px;width:100px" type="submit" value="Search" />
         </div>
     </div>
+
 
 </form>
 

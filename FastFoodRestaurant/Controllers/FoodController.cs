@@ -43,11 +43,14 @@ namespace FastFoodRestaurant.Controllers
 
             var item = new Item()
             {
+             
                Name = foodFromModel.Name,
                Price = foodFromModel.Price
 
             };
-           
+            data.Items.Add(item);
+            data.SaveChanges();
+
 
             var food = new Food()
             {
@@ -62,7 +65,7 @@ namespace FastFoodRestaurant.Controllers
 
          
 
-            data.Items.Add(item);
+    
             data.Foods.Add(food);
             data.SaveChanges();
 

@@ -24,13 +24,9 @@ namespace FastFoodRestaurant.Controllers
         }
         private readonly ApplicationDbContext data;
 
-        [Authorize]
-        public IActionResult OrderNow() 
-        {
-            return View();
-        }
+      
 
-        [HttpPost]
+     
         [Authorize]
         public  IActionResult OrderNow(int itemId)
         {
@@ -132,8 +128,20 @@ namespace FastFoodRestaurant.Controllers
 
             var clientOrder = clientOrders.Where(x => x.IsCompleted == false).FirstOrDefault();
 
+            if (clientOrder == null)
+            {
+                Order order = new Order()
+                {
+                    ClientId = userId
+                };
+                data.Orders.Add(order);
+                data.SaveChanges();
+
+                return RedirectToAction("Cart", "Order");
+            }
+
             var itemIds = data.OrderItems.Where(x => x.OrderId == clientOrder.Id)
-                .Select(x => new { x.ItemId, x.Quantity })
+                .Select(x => new { x.ItemId, x.Quantity})
                 .ToList();
 
            
@@ -165,7 +173,82 @@ namespace FastFoodRestaurant.Controllers
             return View(orderModel);
         }
 
-       
+        public IActionResult ChangeInformation()
+        {
 
+            return RedirectToAction("Information", "Client");
+        }
+
+        public IActionResult PlusQuantity(int itemId, int orderId)
+        {
+            var oi = data.OrderItems.Where(x => x.ItemId == itemId && x.OrderId == orderId).FirstOrDefault();
+            if (oi == null)
+            {
+                return NotFound();
+            }
+
+            oi.Quantity++;
+            data.SaveChanges();
+            return RedirectToAction("Cart", "Order");
+        }
+        public IActionResult MinusQuantity(int itemId, int orderId)
+        {
+            var oi = data.OrderItems.Where(x => x.ItemId == itemId && x.OrderId == orderId).FirstOrDefault();
+            if (oi == null)
+            {
+                return NotFound();
+            }
+
+            if (oi.Quantity == 1)
+            {
+                return RedirectToAction("Cart", "Order");
+                //TODO: Some message to click remove button
+            }
+
+            oi.Quantity--;
+            data.SaveChanges();
+            return RedirectToAction("Cart", "Order");
+        }
+        public IActionResult Remove(int itemId, int orderId)
+        {
+            var oi = data.OrderItems.Where(x => x.ItemId == itemId && x.OrderId == orderId).FirstOrDefault();
+            if (oi == null)
+            {
+                return NotFound();
+            }
+
+
+            data.OrderItems.Remove(oi);
+            data.SaveChanges();
+            return RedirectToAction("Cart", "Order");
+        }
+
+        public IActionResult CompleteOrder(int orderId, decimal totalSum)
+        {
+            var orderFromDb = data.Orders.Where(x => x.Id == orderId).FirstOrDefault();
+
+           
+            if (orderFromDb == null)
+            {
+                return NotFound();
+                //TODO: make something better
+            }
+
+          
+
+            orderFromDb.IsCompleted = true;
+            orderFromDb.TotalSum = totalSum;
+
+            if (orderFromDb.TotalSum == 0)
+            {
+               return RedirectToAction("Cart", "Order");
+                //TODO: ADD MESSAGE
+            }
+
+            orderFromDb.OrderDate = DateTime.Now;
+            data.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
