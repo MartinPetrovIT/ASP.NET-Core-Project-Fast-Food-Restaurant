@@ -1,5 +1,6 @@
 using FastFoodRestaurant.Data.Models;
 using FastFoodRestaurant.Infrastructure;
+using FastFoodRestaurant.Services.Food;
 using FastFoodResturant.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -49,6 +50,8 @@ namespace FastFoodResturant
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            services.AddTransient<IFoodService, FoodService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

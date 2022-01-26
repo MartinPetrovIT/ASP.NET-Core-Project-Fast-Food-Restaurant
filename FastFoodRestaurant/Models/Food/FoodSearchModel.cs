@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FastFoodRestaurant.Services.Food;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace FastFoodRestaurant.Models.Food
 
         public string Category { get; init; }
 
-        public IEnumerable<FoodListingModel> Food { get; set; }
+        public IEnumerable<FoodServiceListingModel> Food { get; set; }
 
         public IEnumerable<string> Categories { get; set; }
 

@@ -83,11 +83,12 @@ namespace FastFoodRestaurant.Controllers
            
             var drinks = drinkQuery.Select(x => new DrinkListingModel
             {
+                Id = x.Id,
                 Name = x.Name,
                 ImageUrl = x.ImageUrl,
                 Price = x.Price,
-                IsAlcoholic = x.IsAlcoholic
-                
+                IsAlcoholic = x.IsAlcoholic,
+                ItemId = x.ItemId
 
             }).ToList();
 

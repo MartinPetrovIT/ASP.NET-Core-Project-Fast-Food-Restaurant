@@ -26,7 +26,7 @@
             {
 
             <li class="list-group-item text-center">
-                <input asp-controller="Order" asp-action="MinusQuantity" asp-route-itemId="@item.Id" asp-route-orderId="@Model.Id" class="btn btn-primary float-left" type="submit" value="-" />
+                <input asp-controller="Order" asp-action="MinusQuantity" asp-route-itemId="@item.Id" asp-route-orderId="@Model.Id" class="btn btn-primary @(item.Quantity <= 1 ? "disabled" : "")" type="submit" value="-" />
                 @item.Name - @item.Quantity - @(item.Price * item.Quantity) leva!
                 <input asp-controller="Order" asp-action="Remove" asp-route-itemId="@item.Id" asp-route-orderId="@Model.Id" class="btn btn-danger float-right offset-sm-1" type="submit" value="Remove" />
 
@@ -37,7 +37,7 @@
 
             <li class="list-group-item float-left">
                 Price: <h3>@Model.TotalSum leva!</h3>
-                <input asp-controller="Order" asp-action="CompleteOrder" asp-route-orderId="@Model.Id" asp-route-totalSum="@Model.TotalSum" class="btn btn-primary float-right" type="submit" value="Complete order!" />
+                <input asp-controller="Order" asp-action="CompleteOrder" asp-route-orderId="@Model.Id" asp-route-totalSum="@Model.TotalSum" class="btn btn-primary float-right @(Model.Items.Count() < 1 ? "disabled" : "")" type="submit" value="Complete order!" />
             </li>
         </ul>
 

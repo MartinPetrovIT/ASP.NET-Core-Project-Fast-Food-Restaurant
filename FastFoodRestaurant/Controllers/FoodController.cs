@@ -1,6 +1,7 @@
 ﻿using FastFoodRestaurant.Data.Models;
 using FastFoodRestaurant.Models.Food;
 using FastFoodRestaurant.Models.FoodCategory;
+using FastFoodRestaurant.Services.Food;
 using FastFoodResturant.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,13 +14,13 @@ namespace FastFoodRestaurant.Controllers
 {
     public class FoodController : Controller
     {
-        public FoodController(ApplicationDbContext data)
+        public FoodController(ApplicationDbContext data, IFoodService foods)
         {
-        
+            this.foods = foods;
             this.data = data;
         }
         private readonly ApplicationDbContext data;
-
+        private readonly IFoodService foods;
         [Authorize]
         public IActionResult Add()
         {
@@ -74,15 +75,17 @@ namespace FastFoodRestaurant.Controllers
 
         public IActionResult All([FromQuery]FoodSearchModel query)
         {
+
+
             var foodQuery = data.Foods.AsQueryable();
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
                 foodQuery = foodQuery.Where(f =>
                 f.Name.ToLower().Contains(query.SearchTerm.ToLower()) ||
                 f.Description.ToLower().Contains(query.SearchTerm.ToLower()) ||
-                f.Category.Name.ToLower().Contains(query.SearchTerm.ToLower()) 
+                f.Category.Name.ToLower().Contains(query.SearchTerm.ToLower())
                 );
-                
+
             }
 
             if (!string.IsNullOrWhiteSpace(query.Category))
@@ -90,7 +93,7 @@ namespace FastFoodRestaurant.Controllers
                 foodQuery = foodQuery.Where(c => c.Category.Name == query.Category);
 
             }
-            
+
             foodQuery = query.Sorting switch
             {
                 FoodSorting.PriceAcsending => foodQuery.OrderBy(x => x.Price),
@@ -104,15 +107,17 @@ namespace FastFoodRestaurant.Controllers
             var foods = foodQuery
                 .Skip((query.CurrentPage - 1) * FoodSearchModel.EntityPerPage)
                 .Take(FoodSearchModel.EntityPerPage)
-                .Select(x => new FoodListingModel
-            {
-                Name = x.Name,
-                ImageUrl = x.ImageUrl,
-                Price = x.Price,
-                Description = x.Description,
-                Category = x.Category.Name
+                .Select(x => new FoodServiceListingModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    ImageUrl = x.ImageUrl,
+                    Price = x.Price,
+                    Description = x.Description,
+                    Category = x.Category.Name,
+                    ItemId = x.ItemId
 
-            }).ToList();
+                }).ToList();
 
             var foodCategories = data.FoodCategories.Select(x => x.Name);
 

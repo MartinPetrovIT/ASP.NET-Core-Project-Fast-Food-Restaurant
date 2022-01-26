@@ -4,14 +4,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FastFoodRestaurant.Models.FoodCategory
+namespace FastFoodRestaurant.Services.FoodCategory
 {
     public class FoodCategoryModel
     {
 
-        public int Id { get; init; }
-
-        [Required]
-        public string Name { get; set; }
+      public int Id { get; init; }
+    
+      [Required]
+      public string Name { get; set; }
     }
 }

@@ -228,12 +228,13 @@ namespace FastFoodRestaurant.Controllers
             var orderFromDb = data.Orders.Where(x => x.Id == orderId).FirstOrDefault();
 
            
+           
             if (orderFromDb == null)
             {
                 return NotFound();
                 //TODO: make something better
             }
-
+           
           
 
             orderFromDb.IsCompleted = true;

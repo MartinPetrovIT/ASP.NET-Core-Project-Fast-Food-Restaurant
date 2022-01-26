@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FastFoodRestaurant.Models.Food
+namespace FastFoodRestaurant.Services.Food
 {
-    public class FoodListingModel
+    public class FoodServiceListingModel
     {
+
+
+        public int Id { get; set; }
 
         public string Name { get; set; }
 
@@ -18,6 +21,9 @@ namespace FastFoodRestaurant.Models.Food
         public string Description { get; set; }
 
         public string Category { get; set; }
+
+
+        public int ItemId { get; set; }
 
     }
 }
