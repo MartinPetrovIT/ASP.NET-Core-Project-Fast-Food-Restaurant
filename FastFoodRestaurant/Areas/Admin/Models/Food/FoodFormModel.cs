@@ -6,9 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using static FastFoodRestaurant.Data.DataConstants.Food;
 
-namespace FastFoodRestaurant.Models.Food
+namespace FastFoodRestaurant.Areas.Admin.Models.Food
 {
-    public class AddFoodModel
+    public class FoodFormModel
     {
         [Required]
         [StringLength(maxFoodNameLength, MinimumLength = minFoodNameLength)]

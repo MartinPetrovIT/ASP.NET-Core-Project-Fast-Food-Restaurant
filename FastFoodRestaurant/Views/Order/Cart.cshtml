@@ -1,8 +1,10 @@
-﻿@model OrderListingModel
+﻿
+@model OrderListingModel
 
 @{
     ViewData["Title"] = "Cart";
 }
+
 
 
 <form method="post">
@@ -10,11 +12,11 @@
     <div class="col-md-4  mt-4">
         <h2 class="heading-margin">Your Information</h2>
         <ul class="list-group">
-            <li class="list-group-item"><h5>Name:</h5>nnnnn</li>
-            <li class="list-group-item"><h5>Phone:</h5>pppppp</li>
+            <li class="list-group-item"><h5>Name:</h5>@Model.InformationModel.Name</li>
+            <li class="list-group-item"><h5>Phone:</h5>@Model.InformationModel.PhoneNumber</li>
             <li class="list-group-item"><h5>Address:</h5></li>
         </ul>
-        <textarea readonly cols="47" rows="5">aaaaaaaaaaaaaaaaaa</textarea>
+        <textarea readonly cols="47" rows="5">@Model.InformationModel.Address</textarea>
         <input asp-controller="Order" asp-action="ChangeInformation" class="btn btn-primary float-left" type="submit" value="Change Information" />
     </div>
     <div class="col-md-7 offset-1 mt-4">

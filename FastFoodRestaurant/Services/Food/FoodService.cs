@@ -4,8 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FastFoodRestaurant.Models.FoodCategory;
 using FastFoodRestaurant.Services.Food;
 using FastFoodRestaurant.Services.FoodCategory;
+using FastFoodRestaurant.Areas.Admin.Models;
+using FastFoodRestaurant.Areas.Admin.Models.Food;
+using FastFoodRestaurant.Models.Home;
 
 namespace FastFoodRestaurant.Services.Food
 {
@@ -22,8 +26,8 @@ namespace FastFoodRestaurant.Services.Food
             string searchTerm,
             string category,
             FoodSorting foodSorting,
-            int currentPage = 1,
-            int entityPerPage = 4)
+            int currentPage ,
+            int entityPerPage)
         {
 
             var foodQuery = data.Foods.AsQueryable();
@@ -82,18 +86,92 @@ namespace FastFoodRestaurant.Services.Food
             };
         }
 
-        //TODO: need this when make Add service model
-        //private IEnumerable<FoodCategoryModel> GetFoodCategories()
-        //{
-        //    List<FoodCategoryModel> categories =
-        //          data.FoodCategories.Select(x => new FoodCategoryModel
-        //          {
-        //              Id = x.Id,
-        //              Name = x.Name
+        void IFoodService.Add(
+            string name,
+            string imageUrl,
+            decimal price,
+            string description,
+            int categoryId,
+            int itemId)
+        {
+            var food = new FastFoodRestaurant.Data.Models.Food()
+            {
+                Name = name,
+                ImageUrl = imageUrl,
+                Price = price,
+                Description = description,
+                CategoryId = categoryId,
+                ItemId = itemId
 
-        //          }).ToList();
+            };
 
-        //    return categories;
-        //}
+            data.Foods.Add(food);
+            data.SaveChanges();
+        }
+
+        public FoodFormModel ShowFoodToEdit(int foodId)
+        {
+            var listOfCategories = GetFoodCategories();
+            var foodModel = data.Foods.Where(x => x.Id == foodId).Select(x => new FoodFormModel
+            {
+                Name = x.Name,
+                ImageUrl = x.ImageUrl,
+                Price = x.Price,
+                Description = x.Description,
+                CategoryId = x.CategoryId,
+                Categories = listOfCategories
+
+            }).FirstOrDefault();
+
+
+            return foodModel;
+        
+        }
+
+        public int EditFood(int foodId, string name, string imageUrl, decimal price, string description, int categoryId)
+        {
+            var listOfCategories = GetFoodCategories();
+            var foodModel = data.Foods.Where(x => x.Id == foodId).FirstOrDefault();
+
+            foodModel.Name = name;
+            foodModel.ImageUrl = imageUrl;
+            foodModel.Price = price;
+            foodModel.Description = description;
+            foodModel.CategoryId = categoryId;
+
+            data.SaveChanges();
+
+            return foodModel.ItemId;
+
+        }
+
+
+        public List<HomeListingFoodModel> TakeLastAddedFoods()
+        {
+            var foods = data.Foods.OrderByDescending(x => x.Id).Select(x => new HomeListingFoodModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ImageUrl = x.ImageUrl,
+                Price = x.Price,
+                ItemId = x.ItemId
+            }).Take(3).ToList();
+
+            return foods;
+        }
+        public List<Models.FoodCategory.FoodCategoryModel> GetFoodCategories()
+        {
+            List<Models.FoodCategory.FoodCategoryModel> categories =
+                  data.FoodCategories.Select(x => new Models.FoodCategory.FoodCategoryModel
+                  {
+                      Id = x.Id,
+                      Name = x.Name
+
+                  }).ToList();
+
+            return categories;
+        }
+
+       
     }
 }

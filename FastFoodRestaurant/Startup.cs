@@ -1,6 +1,11 @@
+using CarRentingSystem.Infrastructure.Extensions;
 using FastFoodRestaurant.Data.Models;
 using FastFoodRestaurant.Infrastructure;
+using FastFoodRestaurant.Services.Client;
+using FastFoodRestaurant.Services.Drink;
 using FastFoodRestaurant.Services.Food;
+using FastFoodRestaurant.Services.Item;
+using FastFoodRestaurant.Services.Order;
 using FastFoodResturant.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,7 +42,7 @@ namespace FastFoodResturant
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-           
+
 
             services.AddDefaultIdentity<Client>
                 (options =>
@@ -48,10 +53,15 @@ namespace FastFoodResturant
                     options.Password.RequireNonAlphanumeric = false;
 
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
 
             services.AddTransient<IFoodService, FoodService>();
+            services.AddTransient<IItemService, ItemService>();
+            services.AddTransient<IDrinkService, DrinkService>();
+            services.AddTransient<IClientService, ClientService>();
+            services.AddTransient<IOrderService, OrderService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,9 +89,14 @@ namespace FastFoodResturant
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapDefaultAreaRoute();
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+                endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
             });
         }

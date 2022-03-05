@@ -11,34 +11,25 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using FastFoodRestaurant.Models.Home;
+using FastFoodRestaurant.Services.Food;
 
 namespace FastFoodResturant.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext data;
-
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger , ApplicationDbContext data)
+       
+        public HomeController(IFoodService foods)
         {
-            _logger = logger;
-            this.data = data;
+            this.foods = foods;
         }
 
-        public IActionResult Index()
-        {
-            var foods = data.Foods.OrderByDescending(x => x.Id).Select(x => new HomeListingFoodModel
-            {
-                Id = x.Id,
-                Name = x.Name,
-                ImageUrl = x.ImageUrl,
-                Price = x.Price,
-                ItemId = x.ItemId
-            }).Take(3).ToList();
+        private readonly IFoodService foods;
 
+       public IActionResult Index()
+       {
+            var foods = this.foods.TakeLastAddedFoods();
             return View(foods);
-            }
+       }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

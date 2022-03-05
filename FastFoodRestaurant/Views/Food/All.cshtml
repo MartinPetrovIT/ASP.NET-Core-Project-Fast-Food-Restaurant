@@ -72,7 +72,15 @@
                     <h5 class="card-title">@food.Name</h5>
                     <h6 class="card-subtitle mb-2 text-muted">@food.Price Leva!</h6>
                     <p class="card-text">@food.Description</p>
+                    @if (User.IsInRole(AdminConstants.Administrator))
+                    {
+                        <a asp-area="Admin" asp-controller="Food" asp-action="Delete" asp-route-id="@food.Id" class="btn btn-danger float-right  ml-3">Delete</a>
+                        <a asp-area="Admin"  asp-controller="Food"  asp-action="Edit" asp-route-id="@food.Id" class="btn btn-warning float-left ml-3">Edit</a>
+                    }
+                    else
+                    {
                     <a asp-controller="Order" asp-action="OrderNow" asp-route-itemId="@food.ItemId" class="btn btn-primary">Order now</a>
+                    }
                 </div>
             </div>
         </div>

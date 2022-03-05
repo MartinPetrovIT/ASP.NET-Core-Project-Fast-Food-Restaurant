@@ -10,13 +10,13 @@ namespace FastFoodRestaurant.Models.Drink
     {
   
 
-        public IEnumerable<DrinkListingModel> Drink { get; init; }
+        public IEnumerable<DrinkListingModel> Drink { get; set; }
 
         [Display(Name = "Search")]
-        public string SearchTerm { get; init; }
+        public string SearchTerm { get; set; }
 
         [Display(Name = "Alcohol free only")]
-        public bool AlcoholFreeOnly { get; init; }
+        public bool AlcoholFreeOnly { get; set; }
 
 }
 }

@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using static FastFoodRestaurant.Data.DataConstants.Drink;
-namespace FastFoodRestaurant.Models.Drink
+namespace FastFoodRestaurant.Areas.Admin.Models.Drink
 {
-    public class AddDrinkModel
+    public class DrinkFormModel
     {
         [Required]
         [StringLength(maxDrinkNameLength, MinimumLength = minDrinkNameLength)]

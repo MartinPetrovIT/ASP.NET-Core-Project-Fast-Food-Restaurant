@@ -1,4 +1,5 @@
-﻿using FastFoodRestaurant.Models.Item;
+﻿using FastFoodRestaurant.Models.Client;
+using FastFoodRestaurant.Models.Item;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace FastFoodRestaurant.Models.Order
 
         public DateTime OrderDate { get; set; }
 
+        public InformationModel InformationModel { get; set; }
 
     }
 }

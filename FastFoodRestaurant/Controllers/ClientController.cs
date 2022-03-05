@@ -2,6 +2,7 @@
 using FastFoodRestaurant.Models.Client;
 using FastFoodRestaurant.Models.Drink;
 using FastFoodRestaurant.Models.Food;
+using FastFoodRestaurant.Services.Client;
 using FastFoodResturant.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,18 +17,15 @@ namespace FastFoodRestaurant.Controllers
 {
     public class ClientController : Controller
     {
-        public ClientController(ApplicationDbContext data, UserManager<Client> userManager)
+        public ClientController(IClientService clientService)
         {
-
-            this.data = data;
-            this.userManager = userManager;
+            this.clientService = clientService;
         }
-        private readonly ApplicationDbContext data;
-        private readonly UserManager<Client> userManager;
+        private readonly IClientService clientService;
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Information(InformationModel informationModel)
+        public IActionResult Information(InformationModel informationModel)
         {
             if (!ModelState.IsValid)
             {
@@ -36,47 +34,33 @@ namespace FastFoodRestaurant.Controllers
             }
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var client = await userManager.FindByIdAsync(userId);
-
-            if (client == null)
+            if (userId == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentNullException();
             }
             else
             {
-                client.Address = informationModel.Address;
-                client.PhoneNumber = informationModel.PhoneNumber;
-                client.Name = informationModel.Name;
+                clientService.SetInformation(
+                    userId, 
+                    informationModel.Name, 
+                    informationModel.PhoneNumber, 
+                    informationModel.Address);
 
             }
-
-         
-
-
-            data.SaveChanges();
-
 
             return RedirectToAction("Index","Home");
         }
 
         [Authorize]
-        public async Task<IActionResult> Information()
+        public IActionResult Information()
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var client = await userManager.FindByIdAsync(userId);
-
-            if (client == null)
+            if (userId == null)
             {
-               return View();
+                throw new ArgumentNullException();
             }
-            InformationModel model = new InformationModel
-            {
-                Name = client.Name,
-                PhoneNumber = client.PhoneNumber,
-                Address = client.Address
-
-            };
+            var model = clientService.ShowInformation(userId);
 
             return View(model);
 

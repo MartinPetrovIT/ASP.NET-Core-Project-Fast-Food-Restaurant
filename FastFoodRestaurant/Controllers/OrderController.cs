@@ -3,6 +3,8 @@ using FastFoodRestaurant.Models.Food;
 using FastFoodRestaurant.Models.Home;
 using FastFoodRestaurant.Models.Item;
 using FastFoodRestaurant.Models.Order;
+using FastFoodRestaurant.Services.Client;
+using FastFoodRestaurant.Services.Order;
 using FastFoodResturant.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,12 +19,16 @@ namespace FastFoodRestaurant.Controllers
 {
     public class OrderController : Controller
     {
-        public OrderController(ApplicationDbContext data)
+        public OrderController(IClientService clientService, IOrderService orderService)
         {
-
-            this.data = data;
+            this.clientService = clientService;
+      
+            this.orderService = orderService;
         }
-        private readonly ApplicationDbContext data;
+        private readonly IClientService clientService;
+        private readonly IOrderService orderService;
+       
+
 
       
 
@@ -32,88 +38,7 @@ namespace FastFoodRestaurant.Controllers
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var item = data.Items.Where(x => x.Id == itemId).FirstOrDefault();
-
-            var clientOrders = data.Orders.Where(x => x.Client.Id == userId);
-            if (item == null)
-            {
-                throw new ArgumentException();
-            }
-
-            if (userId == null)
-            {
-                throw new ArgumentException();
-            }
-            if (clientOrders.Count() == 0)
-            {
-                Order order = new Order()
-                {
-                    ClientId = userId,
-                    
-                };
-
-                OrderItem orderItem = new OrderItem
-                {
-                    ItemId = item.Id,
-                    OrderId = order.Id,
-                    Order = order
-     
-                };
-
-                data.OrderItems.Add(orderItem);
-                data.Orders.Add(order);
-                data.SaveChanges();
-            }
-            var clientOrder = clientOrders.Where(x => x.IsCompleted == false).FirstOrDefault();
-
-            if (clientOrder == null)
-            {
-                Order order = new Order()
-                {
-                    ClientId = userId,
-
-                };
-
-                OrderItem orderItem = new OrderItem
-                {
-                    ItemId = item.Id,
-                    OrderId = order.Id,
-                    Order = order
-
-                };
-
-                data.OrderItems.Add(orderItem);
-                data.Orders.Add(order);
-                data.SaveChanges();
-
-            }
-            else
-            {
-                var orderItema = data.OrderItems
-                    .Where(x => x.ItemId == itemId && x.OrderId == clientOrder.Id)
-                    .FirstOrDefault();
-
-                if (orderItema != null)
-                {
-                    orderItema.Quantity++;
-                }
-                else
-                {
-
-                OrderItem orderItem = new OrderItem
-                {
-                    ItemId = item.Id,
-                    OrderId = clientOrder.Id,
-                    Order = clientOrder
-
-                };
-
-                data.OrderItems.Add(orderItem);
-                }
-
-            }
-
-            data.SaveChanges();
+            orderService.OrderNow(userId, itemId);
 
             return RedirectToAction("Index", "Home");
         }
@@ -124,52 +49,17 @@ namespace FastFoodRestaurant.Controllers
            
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            var clientOrders = data.Orders.Where(x => x.Client.Id == userId).ToList();
+            var flag = orderService.Cart(userId, orderModel);
 
-            var clientOrder = clientOrders.Where(x => x.IsCompleted == false).FirstOrDefault();
-
-            if (clientOrder == null)
+            if (flag == null)
             {
-                Order order = new Order()
-                {
-                    ClientId = userId
-                };
-                data.Orders.Add(order);
-                data.SaveChanges();
-
                 return RedirectToAction("Cart", "Order");
             }
-
-            var itemIds = data.OrderItems.Where(x => x.OrderId == clientOrder.Id)
-                .Select(x => new { x.ItemId, x.Quantity})
-                .ToList();
-
-           
-
-            foreach (var itemIdAndQuantity in itemIds)
+            if (flag == true)
             {
-                
-                if (!(data.Items.Any(x => x.Id == itemIdAndQuantity.ItemId)) )
-                {
-                    throw new ArgumentException();
-                }
-                var item = data.Items.Where(x => x.Id == itemIdAndQuantity.ItemId).FirstOrDefault();
-
-                ItemListingModel itemListing = new ItemListingModel
-                { 
-                    Id = itemIdAndQuantity.ItemId,
-                    Name = item.Name,
-                    Price  = item.Price,
-                    Quantity = itemIdAndQuantity.Quantity
-                    
-                };
-
-
-                orderModel.Items.Add(itemListing);
+              orderModel.InformationModel = clientService.ShowInformation(userId);
             }
 
-            orderModel.TotalSum = orderModel.Items.Sum(x => x.Price * x.Quantity);
-            orderModel.Id = clientOrder.Id;
             return View(orderModel);
         }
 
@@ -181,55 +71,57 @@ namespace FastFoodRestaurant.Controllers
 
         public IActionResult PlusQuantity(int itemId, int orderId)
         {
-            var oi = data.OrderItems.Where(x => x.ItemId == itemId && x.OrderId == orderId).FirstOrDefault();
+            var oi = orderService.PlusQuantity(itemId, orderId);
             if (oi == null)
             {
                 return NotFound();
             }
 
-            oi.Quantity++;
-            data.SaveChanges();
             return RedirectToAction("Cart", "Order");
         }
         public IActionResult MinusQuantity(int itemId, int orderId)
         {
-            var oi = data.OrderItems.Where(x => x.ItemId == itemId && x.OrderId == orderId).FirstOrDefault();
+            var oi = orderService.MinusQuantity(itemId, orderId);
             if (oi == null)
             {
                 return NotFound();
             }
-
-            if (oi.Quantity == 1)
+                
+            if (oi == false)
             {
                 return RedirectToAction("Cart", "Order");
                 //TODO: Some message to click remove button
             }
 
-            oi.Quantity--;
-            data.SaveChanges();
             return RedirectToAction("Cart", "Order");
         }
         public IActionResult Remove(int itemId, int orderId)
         {
-            var oi = data.OrderItems.Where(x => x.ItemId == itemId && x.OrderId == orderId).FirstOrDefault();
+            var oi = orderService.Remove(itemId, orderId);
             if (oi == null)
             {
                 return NotFound();
             }
 
-
-            data.OrderItems.Remove(oi);
-            data.SaveChanges();
             return RedirectToAction("Cart", "Order");
+        }
+
+        public IActionResult MyOrderHistory()
+        {
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var allOrders = orderService.MyOrderHistory(userId);
+
+            return View(allOrders);
         }
 
         public IActionResult CompleteOrder(int orderId, decimal totalSum)
         {
-            var orderFromDb = data.Orders.Where(x => x.Id == orderId).FirstOrDefault();
+            var flag = orderService.CompleteOrder(orderId, totalSum);
 
            
            
-            if (orderFromDb == null)
+            if (flag == null)
             {
                 return NotFound();
                 //TODO: make something better
@@ -237,18 +129,15 @@ namespace FastFoodRestaurant.Controllers
            
           
 
-            orderFromDb.IsCompleted = true;
-            orderFromDb.TotalSum = totalSum;
+           
 
-            if (orderFromDb.TotalSum == 0)
+            if (flag == false)
             {
                return RedirectToAction("Cart", "Order");
-                //TODO: ADD MESSAGE
+               
             }
 
-            orderFromDb.OrderDate = DateTime.Now;
-            data.SaveChanges();
-
+            
             return RedirectToAction("Index", "Home");
         }
     }

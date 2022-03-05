@@ -1,4 +1,5 @@
-﻿using FastFoodRestaurant.Services.Food;
+﻿using FastFoodRestaurant.Models.Food;
+using FastFoodRestaurant.Services.Food;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

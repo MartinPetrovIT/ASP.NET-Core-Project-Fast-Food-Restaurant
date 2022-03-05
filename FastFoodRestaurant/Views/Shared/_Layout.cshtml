@@ -25,18 +25,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Drink" asp-action="All">Drinks</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark waves-effect waves-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-hidden="true">
-                                Add
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Drink" asp-action="Add">Drink</a>
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Food" asp-action="Add">Food</a>
-                            </div>
-
-                        </li>
-
+                        @if (User.IsInRole(AdminConstants.Administrator))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark waves-effect waves-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-hidden="true">
+                                    Add
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="nav-link text-dark" asp-area="Admin" asp-controller="Drink"  asp-action="Add">Drink</a>
+                                    <a class="nav-link text-dark" asp-area="Admin" asp-controller="Food" asp-action="Add">Food</a>
+                                </div>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

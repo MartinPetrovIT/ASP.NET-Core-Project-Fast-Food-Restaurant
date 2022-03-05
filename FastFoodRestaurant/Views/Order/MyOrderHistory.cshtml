@@ -1,0 +1,40 @@
+﻿@model List<OrderHistoryModel>
+
+@{
+    ViewData["Title"] = "Order History";
+}
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="heading-margin text-center">My order history</h2>
+        @foreach (var item1 in Model)
+        {
+            <table class="table">
+
+
+                <thead>
+                    <tr>
+                        <th scope="col">Order Date - @item1.OrderDate</th>
+                        <th scope="col">Items</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Price (FullPrice - @item1.FullPrice.ToString("F2"))</th>
+                    </tr>
+                </thead>
+
+                @foreach (var item in item1.Items)
+                {
+
+                    <tbody>
+                        <tr>
+                            <th row"1"></th>
+                            <td>@item.Name</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price.ToString("F2")</td>
+
+                    </tbody>
+                }
+            </table>
+
+        }
+    </div>
+</div>

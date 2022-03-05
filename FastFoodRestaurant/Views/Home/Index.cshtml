@@ -25,7 +25,15 @@
                         <div class="carousel-caption d-none d-md-block">
                             <h4>New specialty</h4>
                             <h5>@first.Name - @first.Price Leva!</h5>
+                            @if (User.IsInRole(AdminConstants.Administrator))
+                            {
+                                <a asp-area="Admin" asp-controller="Food" asp-action="Delete" asp-route-id="@first.Id" class="btn btn-danger float-right  ml-3">Delete</a>
+                                <a asp-area="Admin" asp-controller="Food" asp-action="Edit" asp-route-id="@first.Id" class="btn btn-warning float-left ml-3">Edit</a>
+                            }
+                            else
+                            {
                             <a asp-controller="Order" asp-action="OrderNow" asp-route-itemId="@first.ItemId" class="btn btn-primary">Order now</a>
+                            }
                         </div>
                     </div>
                 }
@@ -37,7 +45,15 @@
                         <div class="carousel-caption d-none d-md-block">
                             <h4>New specialty</h4>
                             <h5>@second.Name - @second.Price Leva!</h5>
+                            @if (User.IsInRole(AdminConstants.Administrator))
+                            {
+                                <a asp-area="Admin" asp-controller="Food" asp-action="Delete" asp-route-id="@second.Id" class="btn btn-danger float-right  ml-3">Delete</a>
+                                <a asp-area="Admin" asp-controller="Food" asp-action="Edit" asp-route-id="@second.Id" class="btn btn-warning float-left ml-3">Edit</a>
+                            }
+                            else
+                            {
                             <a asp-controller="Order" asp-action="OrderNow" asp-route-itemId="@second.ItemId" class="btn btn-primary">Order now</a>
+                            }
                         </div>
                     </div>
                 }
@@ -49,7 +65,15 @@
                         <div class="carousel-caption d-none d-md-block">
                             <h4>New specialty</h4>
                             <h5>@third.Name - @third.Price Leva!</h5>
+                            @if (User.IsInRole(AdminConstants.Administrator))
+                            {
+                                <a asp-area="Admin" asp-controller="Food" asp-action="Delete" asp-route-id="@third.Id" class="btn btn-danger float-right  ml-3">Delete</a>
+                                <a asp-area="Admin" asp-controller="Food" asp-action="Edit" asp-route-id="@third.Id" class="btn btn-warning float-left ml-3">Edit</a>
+                            }
+                            else
+                            {
                             <a asp-controller="Order" asp-action="OrderNow" asp-route-itemId="@third.ItemId" class="btn btn-primary">Order now</a>
+                            }
                         </div>
                     </div>
                 }
