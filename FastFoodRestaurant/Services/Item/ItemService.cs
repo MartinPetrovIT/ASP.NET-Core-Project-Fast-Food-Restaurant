@@ -29,6 +29,16 @@ namespace FastFoodRestaurant.Services.Item
             return item.Id;
         }
 
+        public void Delete(int id)
+        {
+            var item = data.Items.Where(x => x.Id == id).FirstOrDefault();
+         
+            data.Items.Remove(item);
+
+            data.SaveChanges();
+
+        }
+
         public void Edit(int id, string name, decimal price)
         {
             var item = data.Items.Where(x => x.Id == id).FirstOrDefault();

@@ -15,14 +15,12 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
     public class FoodController : AdminController
     {
 
-        public FoodController(ApplicationDbContext data, IFoodService foods, IItemService items)
+        public FoodController(IFoodService foods, IItemService items)
         {
             this.foods = foods;
-            this.data = data;
             this.items = items;
         }
 
-        private readonly ApplicationDbContext data;
         private readonly IFoodService foods;
         private readonly IItemService items;
 
@@ -36,33 +34,38 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
         [Authorize(Roles = AdminConstants.Administrator)]
         public IActionResult Add(FoodFormModel foodFromModel)
         {
-            if (!this.data.FoodCategories.Any(c => c.Id == foodFromModel.CategoryId))
-            {
-                ModelState.AddModelError(nameof(foodFromModel), "Category does not exist!");
-            }
+          
             if (!ModelState.IsValid)
             {
                 foodFromModel.Categories = foods.GetFoodCategories();
                 return View(foodFromModel);
             }
 
+            if (!foods.CheckCategoryId(foodFromModel.CategoryId))
+            {
+                ModelState.AddModelError(nameof(foodFromModel), "Category does not exist!");
+            }
 
             var itemId = items.Add(foodFromModel.Name, foodFromModel.Price);
 
+               foods.Add(foodFromModel.Name,
+               foodFromModel.ImageUrl,
+               foodFromModel.Price,
+               foodFromModel.Description,
+               foodFromModel.CategoryId,
+               itemId);
 
-            foods.Add(foodFromModel.Name,
-                foodFromModel.ImageUrl,
-                foodFromModel.Price,
-                foodFromModel.Description,
-                foodFromModel.CategoryId,
-                itemId);
+            
 
-            return RedirectToAction("Index", "Home");
+
+            return Redirect("/");
         }
 
         [Authorize(Roles = AdminConstants.Administrator)]
         public IActionResult Edit(int id)
         {
+            
+
             var foodModel = foods.ShowFoodToEdit(id);
 
             return View(foodModel);
@@ -72,6 +75,17 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(FoodFormModel editedModel, int id)
         {
+            if (!ModelState.IsValid)
+            {
+                editedModel.Categories = foods.GetFoodCategories();
+                return View(editedModel);
+            }
+
+            if (!foods.CheckCategoryId(editedModel.CategoryId))
+            {
+                ModelState.AddModelError(nameof(editedModel), "Category does not exist!");
+            }
+
             var itemId = foods.EditFood(
                 id,
                 editedModel.Name, 
@@ -85,8 +99,16 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
                 editedModel.Name,
                 editedModel.Price);
 
-            return RedirectToAction("Index", "Home");
+            return Redirect("/");
 
+        }
+
+        [Authorize(Roles = AdminConstants.Administrator)]
+        public IActionResult Delete(int id)
+        {
+            items.Delete(foods.Delete(id));
+
+            return Redirect("/");
         }
     }
 }

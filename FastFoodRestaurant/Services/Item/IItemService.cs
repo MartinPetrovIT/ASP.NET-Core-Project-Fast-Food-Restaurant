@@ -15,5 +15,7 @@ namespace FastFoodRestaurant.Services.Item
             string name, 
             decimal price);
 
+        void Delete(int id);
+
     }
 }

@@ -36,6 +36,10 @@ namespace FastFoodRestaurant.Services.Food
             string description,
             int categoryId);
 
+        int Delete(int id);
+
+        bool CheckCategoryId(int categoryId);
+
          FoodFormModel ShowFoodToEdit(int foodId);
 
          List<FoodCategoryModel> GetFoodCategories();

@@ -49,8 +49,48 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
                 itemId);
 
 
-            return RedirectToAction("Index", "Home");
+            return Redirect("/");
+        }
+        [Authorize(Roles = AdminConstants.Administrator)]
+        public IActionResult Edit(int id)
+        {
+            var drinkModel = drinks.ShowDrinkToEdit(id);
+
+            return View("Areas/Admin/Views/Drink/Add.cshtml", drinkModel);
         }
 
+        [Authorize(Roles = AdminConstants.Administrator)]
+        [HttpPost]
+        public IActionResult Edit(DrinkFormModel drinkFromModel, int id)
+        {
+          
+
+            if (!ModelState.IsValid)
+            {
+                return View(drinkFromModel);
+
+            }
+
+
+            var itemId = drinks.EditDrink(id,
+                drinkFromModel.Name,
+                drinkFromModel.ImageUrl,
+                drinkFromModel.Price,
+                drinkFromModel.IsAlcoholic
+                );
+
+            items.Edit(itemId, drinkFromModel.Name, drinkFromModel.Price);
+
+
+            return Redirect("/");
+        }
+
+        [Authorize(Roles = AdminConstants.Administrator)]
+        public IActionResult Delete(int id)
+        {
+            items.Delete(drinks.Delete(id));
+
+            return Redirect("/");
+        }
     }
 }

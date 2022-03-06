@@ -10,6 +10,8 @@ using FastFoodRestaurant.Services.FoodCategory;
 using FastFoodRestaurant.Areas.Admin.Models;
 using FastFoodRestaurant.Areas.Admin.Models.Food;
 using FastFoodRestaurant.Models.Home;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace FastFoodRestaurant.Services.Food
 {
@@ -17,9 +19,12 @@ namespace FastFoodRestaurant.Services.Food
     {
         private readonly ApplicationDbContext data;
 
-        public FoodService(ApplicationDbContext data)
+        private readonly IMapper mapper;
+
+        public FoodService(ApplicationDbContext data, IMapper mapper)
         {
             this.data = data;
+            this.mapper = mapper;
         }
         
         public FoodSearchModel All(
@@ -60,17 +65,8 @@ namespace FastFoodRestaurant.Services.Food
             var foods = foodQuery
                 .Skip((currentPage - 1) * FoodSearchModel.EntityPerPage)
                 .Take(FoodSearchModel.EntityPerPage)
-                .Select(x => new FoodServiceListingModel
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    ImageUrl = x.ImageUrl,
-                    Price = x.Price,
-                    Description = x.Description,
-                    Category = x.Category.Name,
-                    ItemId = x.ItemId
-
-                }).ToList();
+                .ProjectTo<FoodServiceListingModel>(mapper.ConfigurationProvider)
+                .ToList();
 
 
             var foodCategories = data.FoodCategories.Select(x => x.Name);
@@ -86,7 +82,7 @@ namespace FastFoodRestaurant.Services.Food
             };
         }
 
-        void IFoodService.Add(
+       void IFoodService.Add(
             string name,
             string imageUrl,
             decimal price,
@@ -94,7 +90,9 @@ namespace FastFoodRestaurant.Services.Food
             int categoryId,
             int itemId)
         {
-            var food = new FastFoodRestaurant.Data.Models.Food()
+           
+
+            var food = new Data.Models.Food()
             {
                 Name = name,
                 ImageUrl = imageUrl,
@@ -107,30 +105,45 @@ namespace FastFoodRestaurant.Services.Food
 
             data.Foods.Add(food);
             data.SaveChanges();
+
+         
+        }
+
+        public bool CheckCategoryId(int categoryId)
+        {
+            if (!this.data.FoodCategories.Any(c => c.Id == categoryId))
+            {
+                return false;
+            }
+              return true;
+
         }
 
         public FoodFormModel ShowFoodToEdit(int foodId)
         {
+           
+
             var listOfCategories = GetFoodCategories();
-            var foodModel = data.Foods.Where(x => x.Id == foodId).Select(x => new FoodFormModel
-            {
-                Name = x.Name,
-                ImageUrl = x.ImageUrl,
-                Price = x.Price,
-                Description = x.Description,
-                CategoryId = x.CategoryId,
-                Categories = listOfCategories
 
-            }).FirstOrDefault();
+            
+            var foodModel = data.Foods.Where(x => x.Id == foodId)
+                .ProjectTo<FoodFormModel>(this.mapper.ConfigurationProvider)
+               .FirstOrDefault();
 
+            foodModel.Categories = listOfCategories;
 
             return foodModel;
-        
+
+           
+
         }
 
         public int EditFood(int foodId, string name, string imageUrl, decimal price, string description, int categoryId)
         {
+
             var listOfCategories = GetFoodCategories();
+
+
             var foodModel = data.Foods.Where(x => x.Id == foodId).FirstOrDefault();
 
             foodModel.Name = name;
@@ -145,29 +158,35 @@ namespace FastFoodRestaurant.Services.Food
 
         }
 
+        public int Delete(int id)
+        {
+            var food = data.Foods.Where(x => x.Id == id).FirstOrDefault();
+
+            var itemId = food.ItemId;
+
+            data.Foods.Remove(food);
+
+            data.SaveChanges();
+
+            return itemId;
+        }
+
 
         public List<HomeListingFoodModel> TakeLastAddedFoods()
         {
-            var foods = data.Foods.OrderByDescending(x => x.Id).Select(x => new HomeListingFoodModel
-            {
-                Id = x.Id,
-                Name = x.Name,
-                ImageUrl = x.ImageUrl,
-                Price = x.Price,
-                ItemId = x.ItemId
-            }).Take(3).ToList();
+            var foods = data.Foods.OrderByDescending(x => x.Id)
+           .ProjectTo<HomeListingFoodModel>(this.mapper.ConfigurationProvider)
+           .Take(3)
+           .ToList();
 
             return foods;
         }
         public List<Models.FoodCategory.FoodCategoryModel> GetFoodCategories()
         {
             List<Models.FoodCategory.FoodCategoryModel> categories =
-                  data.FoodCategories.Select(x => new Models.FoodCategory.FoodCategoryModel
-                  {
-                      Id = x.Id,
-                      Name = x.Name
-
-                  }).ToList();
+              data.FoodCategories
+              .ProjectTo<Models.FoodCategory.FoodCategoryModel>(mapper.ConfigurationProvider)
+              .ToList();
 
             return categories;
         }

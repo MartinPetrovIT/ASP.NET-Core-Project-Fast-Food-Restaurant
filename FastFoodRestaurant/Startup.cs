@@ -55,6 +55,10 @@ namespace FastFoodResturant
                 })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddControllersWithViews();
 
             services.AddTransient<IFoodService, FoodService>();

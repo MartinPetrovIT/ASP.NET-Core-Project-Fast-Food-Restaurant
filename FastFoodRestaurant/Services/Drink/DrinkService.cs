@@ -1,4 +1,7 @@
-﻿using FastFoodRestaurant.Models.Drink;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using FastFoodRestaurant.Areas.Admin.Models.Drink;
+using FastFoodRestaurant.Models.Drink;
 using FastFoodResturant.Data;
 using System;
 using System.Collections.Generic;
@@ -9,11 +12,13 @@ namespace FastFoodRestaurant.Services.Drink
 {
     public class DrinkService : IDrinkService
     {
-        public DrinkService(ApplicationDbContext data)
+        public DrinkService(ApplicationDbContext data, IMapper mapper)
         {
             this.data = data;
+            this.mapper = mapper;
         }
         private readonly ApplicationDbContext data;
+        private readonly IMapper mapper;
         public DrinkSearchModel All(string searchTerm, bool alcoholFreeOnly)
         {
             var drinkQuery = data.Drinks.AsQueryable();
@@ -29,16 +34,9 @@ namespace FastFoodRestaurant.Services.Drink
                 drinkQuery = drinkQuery.Where(x => x.IsAlcoholic == false);
             }
 
-            var drinks = drinkQuery.Select(x => new DrinkListingModel
-            {
-                Id = x.Id,
-                Name = x.Name,
-                ImageUrl = x.ImageUrl,
-                Price = x.Price,
-                IsAlcoholic = x.IsAlcoholic,
-                ItemId = x.ItemId
-
-            }).ToList();
+            var drinks = drinkQuery
+                .ProjectTo<DrinkListingModel>(mapper.ConfigurationProvider)
+                .ToList();
 
 
             return new DrinkSearchModel
@@ -49,7 +47,7 @@ namespace FastFoodRestaurant.Services.Drink
             };
         }
 
-        void IDrinkService.Add(
+        public void Add(
             string name,
             string imageUrl, 
             decimal price, 
@@ -73,6 +71,45 @@ namespace FastFoodRestaurant.Services.Drink
 
 
             data.SaveChanges();
+        }
+        public DrinkFormModel ShowDrinkToEdit(int drinkId)
+        {
+            var drinkModel = data.Drinks.Where(x => x.Id == drinkId)
+                .ProjectTo<DrinkFormModel>(mapper.ConfigurationProvider)
+                .FirstOrDefault();
+
+            return drinkModel;
+
+        }
+
+        public int EditDrink( int id,
+            string name,
+            string imageUrl,
+            decimal price,
+            bool isAlcoholic)
+        {
+            var drink = data.Drinks.Where(x => x.Id == id).FirstOrDefault();
+
+            drink.Name = name;
+            drink.ImageUrl = imageUrl;
+            drink.Price = price;
+            drink.IsAlcoholic = isAlcoholic;
+
+            data.SaveChanges();
+
+            return drink.ItemId;
+        }
+
+        public int Delete(int id)
+        {
+            var drink = data.Drinks.Where(x => x.Id == id).FirstOrDefault();
+            var itemId = drink.ItemId;
+
+            data.Drinks.Remove(drink);
+
+            data.SaveChanges();
+
+            return itemId;
         }
     }
 }
