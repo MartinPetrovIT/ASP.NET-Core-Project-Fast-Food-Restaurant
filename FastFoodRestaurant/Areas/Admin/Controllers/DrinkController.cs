@@ -3,14 +3,10 @@ using FastFoodRestaurant.Services.Drink;
 using FastFoodRestaurant.Services.Item;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastFoodRestaurant.Areas.Admin.Controllers
 {
-    
+
     public class DrinkController : AdminController
     {
         public DrinkController(IItemService items, IDrinkService drinks)

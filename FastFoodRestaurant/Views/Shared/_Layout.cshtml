@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+    @await RenderSectionAsync("Styles", required: false)
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -25,6 +26,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Drink" asp-action="All">Drinks</a>
                         </li>
+                        @if (User != null && !User.IsInRole(AdminConstants.Administrator))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="MyOrderHistory">Order History</a>
+                            </li>
+                        }
+
                         @if (User.IsInRole(AdminConstants.Administrator))
                         {
                             <li class="nav-item dropdown">
@@ -32,7 +40,7 @@
                                     Add
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="nav-link text-dark" asp-area="Admin" asp-controller="Drink"  asp-action="Add">Drink</a>
+                                    <a class="nav-link text-dark" asp-area="Admin" asp-controller="Drink" asp-action="Add">Drink</a>
                                     <a class="nav-link text-dark" asp-area="Admin" asp-controller="Food" asp-action="Add">Food</a>
                                 </div>
                             </li>
@@ -44,6 +52,18 @@
         </nav>
     </header>
     <div class="container">
+        @if (TempData.ContainsKey(GlobalMessageKey))
+        {
+            <div class="alert alert-success text-center" role="alert">
+                @TempData[GlobalMessageKey]
+            </div>
+        }
+        @if (TempData.ContainsKey(GlobalWarningMessageKey))
+        {
+            <div class="alert alert-danger text-center" role="alert">
+                @TempData[GlobalWarningMessageKey]
+            </div>
+        }
         <main role="main" class="pb-3">
             @RenderBody()
         </main>

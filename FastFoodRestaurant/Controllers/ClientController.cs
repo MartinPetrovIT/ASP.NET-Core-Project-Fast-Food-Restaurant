@@ -1,17 +1,9 @@
 ﻿using FastFoodRestaurant.Data.Models;
 using FastFoodRestaurant.Models.Client;
-using FastFoodRestaurant.Models.Drink;
-using FastFoodRestaurant.Models.Food;
 using FastFoodRestaurant.Services.Client;
-using FastFoodResturant.Data;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace FastFoodRestaurant.Controllers
 {
@@ -29,14 +21,14 @@ namespace FastFoodRestaurant.Controllers
         {
             if (!ModelState.IsValid)
             {
-            
                 return View(informationModel);
             }
+
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             if (userId == null)
             {
-                throw new ArgumentNullException();
+                return NotFound();
             }
             else
             {
@@ -58,7 +50,7 @@ namespace FastFoodRestaurant.Controllers
 
             if (userId == null)
             {
-                throw new ArgumentNullException();
+                return NotFound();
             }
             var model = clientService.ShowInformation(userId);
 

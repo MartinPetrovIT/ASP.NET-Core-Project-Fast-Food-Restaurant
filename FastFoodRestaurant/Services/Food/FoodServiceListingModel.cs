@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace FastFoodRestaurant.Services.Food
+﻿namespace FastFoodRestaurant.Services.Food
 {
     public class FoodServiceListingModel
     {

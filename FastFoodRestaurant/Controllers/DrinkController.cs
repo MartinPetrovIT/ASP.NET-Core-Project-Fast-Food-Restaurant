@@ -1,14 +1,5 @@
-﻿using FastFoodRestaurant.Data.Models;
-using FastFoodRestaurant.Models.Drink;
-using FastFoodRestaurant.Services.Drink;
-using FastFoodRestaurant.Services.Item;
-using FastFoodResturant.Data;
-using Microsoft.AspNetCore.Authorization;
+﻿using FastFoodRestaurant.Services.Drink;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastFoodRestaurant.Controllers
 {

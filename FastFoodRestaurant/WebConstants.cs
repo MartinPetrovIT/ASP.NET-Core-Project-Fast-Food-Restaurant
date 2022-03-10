@@ -5,8 +5,12 @@ using System.Threading.Tasks;
 
 namespace FastFoodRestaurant
 {
-    public static class WebConstants
+    public class WebConstants
     {
-        
+
+        public const string GlobalWarningMessageKey = "GlobalWarningMessage"; 
+
+        public const string GlobalMessageKey = "GlobalMessage";
+
     }
 }

@@ -1,31 +1,29 @@
-﻿using FastFoodRestaurant.Models.Client;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using FastFoodRestaurant.Models.Client;
 using FastFoodResturant.Data;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace FastFoodRestaurant.Services.Client
 {
     public class ClientService : IClientService
     {
 
-        public ClientService(ApplicationDbContext data)
+        public ClientService(ApplicationDbContext data, IMapper mapper)
         {
             this.data = data;
+
+            this.mapper = mapper;
         }
         private readonly ApplicationDbContext data;
+        private readonly IMapper mapper;
 
 
         public InformationModel ShowInformation(string userId)
         =>
-            data.Clients.Where(x => x.Id == userId).Select(x => new InformationModel
-            {
-                Name = x.Name,
-                PhoneNumber = x.PhoneNumber,
-                Address = x.Address
-            }).FirstOrDefault();
+            data.Clients.Where(x => x.Id == userId)
+            .ProjectTo<InformationModel>(mapper.ConfigurationProvider)
+           .FirstOrDefault();
 
         public void SetInformation(string userId, string name, string number, string address)
         {

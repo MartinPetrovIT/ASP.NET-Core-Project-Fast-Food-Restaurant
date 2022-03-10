@@ -1,17 +1,7 @@
-﻿using FastFoodRestaurant.Data.Models;
-using FastFoodRestaurant.Models.Food;
-using FastFoodResturant.Data;
+﻿using FastFoodRestaurant.Services.Food;
 using FastFoodResturant.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using FastFoodRestaurant.Models.Home;
-using FastFoodRestaurant.Services.Food;
 
 namespace FastFoodResturant.Controllers
 {

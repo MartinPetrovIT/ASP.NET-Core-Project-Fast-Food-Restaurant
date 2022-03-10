@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FastFoodRestaurant.Areas.Admin.Models;
-using FastFoodRestaurant.Areas.Admin.Models.Food;
+﻿using FastFoodRestaurant.Areas.Admin.Models.Food;
 using FastFoodRestaurant.Models.Food;
 using FastFoodRestaurant.Models.FoodCategory;
 using FastFoodRestaurant.Models.Home;
+using System.Collections.Generic;
 
 namespace FastFoodRestaurant.Services.Food
 {
-     public interface IFoodService 
+    public interface IFoodService 
     {
         FoodSearchModel All(
             string searchTerm,

@@ -16,7 +16,7 @@ namespace FastFoodRestaurant.Models.Client
         [Required]
         [MaxLength(phoneNumberMaxLength)]
         [Display(Name = "Phone Number")]
-        [RegularExpression(phoneNumberRegEx)]
+        [RegularExpression(phoneNumberRegEx, ErrorMessage = "Phone is not valid")]
         public string PhoneNumber { get; set; }
 
 

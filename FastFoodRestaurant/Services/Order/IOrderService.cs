@@ -8,18 +8,29 @@ namespace FastFoodRestaurant.Services.Order
 {
     public interface IOrderService
     {
-        void OrderNow(string userId, int itemId);
+        void OrderNow(string userId, 
+            int itemId);
 
-        public bool? MinusQuantity(int itemId, int orderId);
+        bool? MinusQuantity(int itemId, 
+            int orderId);
+       
+        bool? PlusQuantity(int itemId,
+            int orderId);
+       
+        bool? Remove(int itemId,
+            int orderId);
+       
+        bool? Cart(string userId,
+            OrderListingModel orderModel);
 
-        public bool? PlusQuantity(int itemId, int orderId);
+        bool? CompleteOrder(int orderId, 
+            decimal totalSum,
+            string userId);
 
-        public bool? Remove(int itemId, int orderId);
 
-        public bool? Cart(string userId, OrderListingModel orderModel);
-
-        public bool? CompleteOrder(int orderId, decimal totalSum);
-
-        public List<OrderHistoryModel> MyOrderHistory(string userId);
+        List<OrderHistoryModel> MyOrderHistory(string userId);
+       
+        List<OrderHistoryModel> FilterDate(List<OrderHistoryModel> collection,
+            string stringDate);
     }
 }

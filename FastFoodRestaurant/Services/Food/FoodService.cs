@@ -1,17 +1,11 @@
-﻿using FastFoodRestaurant.Models.Food;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using FastFoodRestaurant.Areas.Admin.Models.Food;
+using FastFoodRestaurant.Models.Food;
+using FastFoodRestaurant.Models.Home;
 using FastFoodResturant.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using FastFoodRestaurant.Models.FoodCategory;
-using FastFoodRestaurant.Services.Food;
-using FastFoodRestaurant.Services.FoodCategory;
-using FastFoodRestaurant.Areas.Admin.Models;
-using FastFoodRestaurant.Areas.Admin.Models.Food;
-using FastFoodRestaurant.Models.Home;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 
 namespace FastFoodRestaurant.Services.Food
 {

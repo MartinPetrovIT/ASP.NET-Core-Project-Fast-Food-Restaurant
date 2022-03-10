@@ -1,22 +1,14 @@
-﻿using FastFoodRestaurant.Data.Models;
-using FastFoodRestaurant.Models.Food;
-using FastFoodRestaurant.Models.Home;
-using FastFoodRestaurant.Models.Item;
-using FastFoodRestaurant.Models.Order;
+﻿using FastFoodRestaurant.Models.Order;
 using FastFoodRestaurant.Services.Client;
 using FastFoodRestaurant.Services.Order;
-using FastFoodResturant.Data;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace FastFoodRestaurant.Controllers
 {
+    [Authorize]
     public class OrderController : Controller
     {
         public OrderController(IClientService clientService, IOrderService orderService)
@@ -33,17 +25,19 @@ namespace FastFoodRestaurant.Controllers
       
 
      
-        [Authorize]
+
         public  IActionResult OrderNow(int itemId)
         {
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             orderService.OrderNow(userId, itemId);
 
+            TempData[WebConstants.GlobalMessageKey] = "The item is added to your cart!";
+
             return RedirectToAction("Index", "Home");
         }
 
-        [Authorize]
+     
         public IActionResult Cart(OrderListingModel orderModel)
         {
            
@@ -59,6 +53,7 @@ namespace FastFoodRestaurant.Controllers
             {
               orderModel.InformationModel = clientService.ShowInformation(userId);
             }
+
 
             return View(orderModel);
         }
@@ -89,6 +84,7 @@ namespace FastFoodRestaurant.Controllers
                 
             if (oi == false)
             {
+               
                 return RedirectToAction("Cart", "Order");
                 //TODO: Some message to click remove button
             }
@@ -106,38 +102,55 @@ namespace FastFoodRestaurant.Controllers
             return RedirectToAction("Cart", "Order");
         }
 
-        public IActionResult MyOrderHistory()
+
+        //public IActionResult MyOrderHistory()
+        //{
+        //    var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+        //    var allOrders = orderService.MyOrderHistory(userId);
+
+        //    return View(allOrders);
+        //}
+
+       
+        public IActionResult MyOrderHistory(string dDate)
         {
+            if (dDate is null)
+            {
+                dDate = DateTime.UtcNow.ToString("dd/MM/yyyy");
+            }
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             var allOrders = orderService.MyOrderHistory(userId);
 
-            return View(allOrders);
-        }
+            var filteredOrders = orderService.FilterDate(allOrders, dDate);
 
+            return View(filteredOrders);
+        }
         public IActionResult CompleteOrder(int orderId, decimal totalSum)
         {
-            var flag = orderService.CompleteOrder(orderId, totalSum);
+            
+            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var flag = orderService.CompleteOrder(orderId, totalSum, userId);
 
            
            
             if (flag == null)
             {
                 return NotFound();
-                //TODO: make something better
             }
-           
-          
-
            
 
             if (flag == false)
             {
-               return RedirectToAction("Cart", "Order");
-               
+                TempData[WebConstants.GlobalWarningMessageKey] = "Order price can not be 0.00 and all information fields must be filled!";
+
+                return RedirectToAction("Cart", "Order");  
             }
 
-            
+            TempData[WebConstants.GlobalMessageKey] = "Your order is completed!";
+
             return RedirectToAction("Index", "Home");
         }
     }

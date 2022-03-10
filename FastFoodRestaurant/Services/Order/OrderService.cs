@@ -1,20 +1,24 @@
 ﻿using FastFoodRestaurant.Data.Models;
 using FastFoodRestaurant.Models.Item;
 using FastFoodRestaurant.Models.Order;
+using FastFoodRestaurant.Services.Client;
 using FastFoodResturant.Data;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace FastFoodRestaurant.Services.Order
 {
     public class OrderService : IOrderService
     {
         private readonly ApplicationDbContext data;
-        public OrderService(ApplicationDbContext data)
+
+        private readonly IClientService client;
+        public OrderService(ApplicationDbContext data, IClientService client)
         {
             this.data = data;
+            this.client = client;
         }
         public void OrderNow(string userId, int itemId)
         {
@@ -32,7 +36,7 @@ namespace FastFoodRestaurant.Services.Order
             }
             if (clientOrders.Count() == 0)
             {
-                FastFoodRestaurant.Data.Models.Order order = new FastFoodRestaurant.Data.Models.Order()
+                Data.Models.Order order = new Data.Models.Order()
                 {
                     ClientId = userId,
 
@@ -54,7 +58,7 @@ namespace FastFoodRestaurant.Services.Order
 
             if (clientOrder == null)
             {
-                FastFoodRestaurant.Data.Models.Order order = new FastFoodRestaurant.Data.Models.Order()
+                Data.Models.Order order = new Data.Models.Order()
                 {
                     ClientId = userId,
 
@@ -242,11 +246,36 @@ namespace FastFoodRestaurant.Services.Order
             return allOrders;
         }
 
-        public bool? CompleteOrder(int orderId, decimal totalSum)
+        public List<OrderHistoryModel> FilterDate(List<OrderHistoryModel> collection, string stringDate)
+        {   
+            
+            var date = Convert.ToDateTime(
+                DateTime.ParseExact(stringDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
+
+
+
+            return collection.Where(x => x.OrderDate.Year == date.Year 
+            && x.OrderDate.Month == date.Month
+             && x.OrderDate.Day == date.Day)
+                .ToList();
+
+        }
+
+
+
+        public bool? CompleteOrder(int orderId, decimal totalSum, string userId)
         {
             var orderFromDb = data.Orders.Where(x => x.Id == orderId).FirstOrDefault();
 
+            var infoModel = client.ShowInformation(userId);
 
+            if (infoModel.Address is null ||
+                infoModel.Name is null||
+                infoModel.PhoneNumber is null)
+            {
+                return false;
+            }
 
             if (orderFromDb == null)
             {
