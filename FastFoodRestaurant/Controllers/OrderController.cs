@@ -4,6 +4,7 @@ using FastFoodRestaurant.Services.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace FastFoodRestaurant.Controllers
@@ -28,8 +29,17 @@ namespace FastFoodRestaurant.Controllers
 
         public  IActionResult OrderNow(int itemId)
         {
+           
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
+            var clientInfo = clientService.ShowInformation(userId);
+            if (clientInfo.Address == null ||
+                clientInfo.Name == null ||
+                clientInfo.PhoneNumber == null)
+            {
+                TempData[WebConstants.GlobalWarningMessageKey] = "You should add order information, before make an order!";
+                return RedirectToAction("Information", "Client");
+            }
             orderService.OrderNow(userId, itemId);
 
             TempData[WebConstants.GlobalMessageKey] = "The item is added to your cart!";
@@ -42,7 +52,14 @@ namespace FastFoodRestaurant.Controllers
         {
            
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
+            var clientInfo = clientService.ShowInformation(userId);
+            if (clientInfo.Address == null ||
+        clientInfo.Name == null ||
+        clientInfo.PhoneNumber == null)
+            {
+                TempData[WebConstants.GlobalWarningMessageKey] = "You should add order information, before add item in cart!";
+                return RedirectToAction("Information", "Client");
+            }
             var flag = orderService.Cart(userId, orderModel);
 
             if (flag == null)
@@ -121,6 +138,7 @@ namespace FastFoodRestaurant.Controllers
             }
             var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
+           
             var allOrders = orderService.MyOrderHistory(userId);
 
             var filteredOrders = orderService.FilterDate(allOrders, dDate);

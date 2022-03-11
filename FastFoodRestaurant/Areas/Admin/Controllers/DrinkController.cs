@@ -52,7 +52,7 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
         {
             var drinkModel = drinks.ShowDrinkToEdit(id);
 
-            return View("Areas/Admin/Views/Drink/Add.cshtml", drinkModel);
+            return View(drinkModel);
         }
 
         [Authorize(Roles = AdminConstants.Administrator)]

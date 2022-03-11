@@ -1,4 +1,5 @@
-﻿using FastFoodRestaurant.Models.Order;
+﻿
+using FastFoodRestaurant.Models.Order;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace FastFoodRestaurant.Services.Order
             decimal totalSum,
             string userId);
 
+        List<OrderHistoryModel> OrderHistory();
 
         List<OrderHistoryModel> MyOrderHistory(string userId);
        

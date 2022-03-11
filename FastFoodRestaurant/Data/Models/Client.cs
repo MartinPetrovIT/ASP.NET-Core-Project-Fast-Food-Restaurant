@@ -17,7 +17,7 @@ namespace FastFoodRestaurant.Data.Models
         [MaxLength(maxAddressLength)]
         public string Address { get; set; }
 
-        [RegularExpression(phoneNumberRegEx)]
+      
         public override string PhoneNumber { get; set ; }
 
 

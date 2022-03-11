@@ -1,4 +1,6 @@
-﻿using FastFoodRestaurant.Data.Models;
+﻿
+using FastFoodRestaurant.Data.Models;
+using FastFoodRestaurant.Models.Client;
 using FastFoodRestaurant.Models.Item;
 using FastFoodRestaurant.Models.Order;
 using FastFoodRestaurant.Services.Client;
@@ -34,12 +36,17 @@ namespace FastFoodRestaurant.Services.Order
             {
                 throw new ArgumentException();
             }
+
+            var clientInfoModel = client.ShowInformation(userId);
+
             if (clientOrders.Count() == 0)
             {
                 Data.Models.Order order = new Data.Models.Order()
                 {
                     ClientId = userId,
-
+                    ClientAddress = clientInfoModel.Address,
+                    ClientName = clientInfoModel.Name,
+                    ClientPhone = clientInfoModel.PhoneNumber
                 };
 
                 OrderItem orderItem = new OrderItem
@@ -61,7 +68,9 @@ namespace FastFoodRestaurant.Services.Order
                 Data.Models.Order order = new Data.Models.Order()
                 {
                     ClientId = userId,
-
+                    ClientAddress = clientInfoModel.Address,
+                    ClientName = clientInfoModel.Name,
+                    ClientPhone = clientInfoModel.PhoneNumber
                 };
 
                 OrderItem orderItem = new OrderItem
@@ -87,7 +96,6 @@ namespace FastFoodRestaurant.Services.Order
                 }
                 else
                 {
-
                     OrderItem orderItem = new OrderItem
                     {
                         ItemId = item.Id,
@@ -131,14 +139,14 @@ namespace FastFoodRestaurant.Services.Order
             {
                 return null;
             }
-           
+
 
             oi.Quantity++;
             data.SaveChanges();
 
             return true;
-        } 
-        
+        }
+
         public bool? Remove(int itemId, int orderId)
         {
             var oi = ShowOrderItem(itemId, orderId);
@@ -155,18 +163,25 @@ namespace FastFoodRestaurant.Services.Order
             return true;
         }
 
-        public bool? Cart(string userId , OrderListingModel orderModel)
+        public bool? Cart(string userId, OrderListingModel orderModel)
         {
 
             var clientOrders = data.Orders.Where(x => x.Client.Id == userId).ToList();
 
             var clientOrder = clientOrders.Where(x => x.IsCompleted == false).FirstOrDefault();
 
+            var clientInfoModel = client.ShowInformation(userId);
+
+
+
             if (clientOrder == null)
             {
                 Data.Models.Order order = new Data.Models.Order()
                 {
-                    ClientId = userId
+                    ClientId = userId,
+                   ClientAddress = clientInfoModel.Address,
+                   ClientName = clientInfoModel.Name,
+                    ClientPhone = clientInfoModel.PhoneNumber
                 };
                 data.Orders.Add(order);
                 data.SaveChanges();
@@ -211,16 +226,95 @@ namespace FastFoodRestaurant.Services.Order
 
         }
 
+        public List<OrderHistoryModel> OrderHistory()
+        {
+
+            var orders = data.Orders.Where(x => x.IsCompleted == true).ToList();
+
+
+            var allOrderHistory = Orders(orders);
+
+            List<OrderHistoryModel> ordersHistoryList = new List<OrderHistoryModel>();
+            foreach (var order in allOrderHistory)
+            {
+
+                OrderHistoryModel aohm = new OrderHistoryModel();
+
+                aohm.FullPrice = order.Model.FullPrice;
+                aohm.Items = order.Model.Items;
+                aohm.OrderDate = order.Model.OrderDate;
+
+
+
+                aohm.ClientInfoModel.Address = order.Model.ClientInfoModel.Address;
+                aohm.ClientInfoModel.Name = order.Model.ClientInfoModel.Name;
+                aohm.ClientInfoModel.PhoneNumber = order.Model.ClientInfoModel.PhoneNumber;
+
+
+                ordersHistoryList.Add(aohm);
+            }
+
+            return ordersHistoryList;
+
+        }
+
+
         public List<OrderHistoryModel> MyOrderHistory(string userId)
         {
             var orders = data.Orders.Where(x => x.ClientId == userId && x.IsCompleted == true).ToList();
 
+            var orderHisory = Orders(orders);
 
-            List<OrderHistoryModel> allOrders = new List<OrderHistoryModel>();
+            List<OrderHistoryModel> orderHistoryList = new List<OrderHistoryModel>();
+
+            var userInfo = data.Clients.Where(x => x.Id == userId).Select(x => new InformationModel
+            {
+                Name = x.Name,
+                PhoneNumber = x.PhoneNumber,
+                Address = x.Address
+            }).FirstOrDefault();
+
+            foreach (var order in orderHisory)
+            {
+                OrderHistoryModel ohm = new OrderHistoryModel();
+                ohm.FullPrice = order.Model.FullPrice;
+                ohm.Items = order.Model.Items;
+                ohm.OrderDate = order.Model.OrderDate;
+                ohm.ClientInfoModel.Name = order.Model.ClientInfoModel.Name;
+                ohm.ClientInfoModel.Address = order.Model.ClientInfoModel.Address;
+                ohm.ClientInfoModel.PhoneNumber = order.Model.ClientInfoModel.PhoneNumber;
+
+                orderHistoryList.Add(ohm);
+            }
+
+            return orderHistoryList;
+
+        }
+
+        public List<OrderHistoryModel> FilterDate(List<OrderHistoryModel> collection, string stringDate)
+        {
+
+            var date = Convert.ToDateTime(
+                DateTime.ParseExact(stringDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
+
+
+
+            return collection.Where(x => x.OrderDate.Year == date.Year
+            && x.OrderDate.Month == date.Month
+             && x.OrderDate.Day == date.Day)
+                .ToList();
+
+        }
+
+        private List<OrderHistoryWithUserIdModel> Orders(List<Data.Models.Order> orders)
+        {
+
+            List<OrderHistoryWithUserIdModel> allOrders = new List<OrderHistoryWithUserIdModel>();
             foreach (var order in orders)
             {
                 var quantityAndItemId = data.OrderItems.Where(x => x.OrderId == order.Id).Select(x => new { x.Quantity, x.ItemId }).ToList();
-                OrderHistoryModel ordersHistories = new OrderHistoryModel();
+                OrderHistoryWithUserIdModel ordersHistories = new OrderHistoryWithUserIdModel();
 
                 foreach (var item in quantityAndItemId)
                 {
@@ -232,13 +326,17 @@ namespace FastFoodRestaurant.Services.Order
                         Quantity = item.Quantity
 
                     }).FirstOrDefault();
+                    ordersHistories.Model.Items.Add(theItem);
+                    ordersHistories.Model.OrderDate = order.OrderDate;
+                    ordersHistories.Model.ClientInfoModel.PhoneNumber = order.ClientPhone;
+                    ordersHistories.Model.ClientInfoModel.Address = order.ClientAddress;
+                    ordersHistories.Model.ClientInfoModel.Name = order.ClientName;
 
-                    ordersHistories.Items.Add(theItem);
-                    ordersHistories.OrderDate = order.OrderDate;
+
                 }
 
-
-                ordersHistories.FullPrice = order.TotalSum;
+                ordersHistories.UserId = order.ClientId;
+                ordersHistories.Model.FullPrice = order.TotalSum;
 
                 allOrders.Add(ordersHistories);
             }
@@ -246,21 +344,7 @@ namespace FastFoodRestaurant.Services.Order
             return allOrders;
         }
 
-        public List<OrderHistoryModel> FilterDate(List<OrderHistoryModel> collection, string stringDate)
-        {   
-            
-            var date = Convert.ToDateTime(
-                DateTime.ParseExact(stringDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
-                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
 
-
-
-            return collection.Where(x => x.OrderDate.Year == date.Year 
-            && x.OrderDate.Month == date.Month
-             && x.OrderDate.Day == date.Day)
-                .ToList();
-
-        }
 
 
 
@@ -271,7 +355,7 @@ namespace FastFoodRestaurant.Services.Order
             var infoModel = client.ShowInformation(userId);
 
             if (infoModel.Address is null ||
-                infoModel.Name is null||
+                infoModel.Name is null ||
                 infoModel.PhoneNumber is null)
             {
                 return false;
@@ -293,6 +377,11 @@ namespace FastFoodRestaurant.Services.Order
             }
 
             orderFromDb.OrderDate = DateTime.Now;
+
+            orderFromDb.ClientName = infoModel.Name;
+            orderFromDb.ClientAddress = infoModel.Address;
+            orderFromDb.ClientPhone = infoModel.PhoneNumber;
+
             data.SaveChanges();
 
             return true;
@@ -300,7 +389,7 @@ namespace FastFoodRestaurant.Services.Order
         }
 
 
-        private OrderItem ShowOrderItem(int itemId , int orderId)
+        private OrderItem ShowOrderItem(int itemId, int orderId)
         => data.OrderItems.Where(x => x.ItemId == itemId && x.OrderId == orderId).FirstOrDefault();
     }
 }

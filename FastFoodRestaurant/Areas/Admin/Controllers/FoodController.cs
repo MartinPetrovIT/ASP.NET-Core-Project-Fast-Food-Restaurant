@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FastFoodRestaurant.Areas.Admin.Controllers
 {
-
+    
     public class FoodController : AdminController
     {
 
@@ -29,7 +29,7 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
         [Authorize(Roles = AdminConstants.Administrator)]
         public IActionResult Add(FoodFormModel foodFromModel)
         {
-          
+      
             if (!ModelState.IsValid)
             {
                 foodFromModel.Categories = foods.GetFoodCategories();
