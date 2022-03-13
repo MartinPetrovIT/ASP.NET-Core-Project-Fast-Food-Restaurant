@@ -41,7 +41,7 @@ namespace FastFoodRestaurant.Services.Order
 
             if (clientOrders.Count() == 0)
             {
-                Data.Models.Order order = new Data.Models.Order()
+                Data.Models.Order order = new()
                 {
                     ClientId = userId,
                     ClientAddress = clientInfoModel.Address,
@@ -49,7 +49,7 @@ namespace FastFoodRestaurant.Services.Order
                     ClientPhone = clientInfoModel.PhoneNumber
                 };
 
-                OrderItem orderItem = new OrderItem
+                OrderItem orderItem = new()
                 {
                     ItemId = item.Id,
                     OrderId = order.Id,
@@ -65,7 +65,7 @@ namespace FastFoodRestaurant.Services.Order
 
             if (clientOrder == null)
             {
-                Data.Models.Order order = new Data.Models.Order()
+                Data.Models.Order order = new()
                 {
                     ClientId = userId,
                     ClientAddress = clientInfoModel.Address,
@@ -73,7 +73,7 @@ namespace FastFoodRestaurant.Services.Order
                     ClientPhone = clientInfoModel.PhoneNumber
                 };
 
-                OrderItem orderItem = new OrderItem
+                OrderItem orderItem = new()
                 {
                     ItemId = item.Id,
                     OrderId = order.Id,
@@ -96,7 +96,7 @@ namespace FastFoodRestaurant.Services.Order
                 }
                 else
                 {
-                    OrderItem orderItem = new OrderItem
+                    OrderItem orderItem = new()
                     {
                         ItemId = item.Id,
                         OrderId = clientOrder.Id,
@@ -176,7 +176,7 @@ namespace FastFoodRestaurant.Services.Order
 
             if (clientOrder == null)
             {
-                Data.Models.Order order = new Data.Models.Order()
+                Data.Models.Order order = new()
                 {
                     ClientId = userId,
                    ClientAddress = clientInfoModel.Address,
@@ -204,7 +204,7 @@ namespace FastFoodRestaurant.Services.Order
                 }
                 var item = data.Items.Where(x => x.Id == itemIdAndQuantity.ItemId).FirstOrDefault();
 
-                ItemListingModel itemListing = new ItemListingModel
+                ItemListingModel itemListing = new()
                 {
                     Id = itemIdAndQuantity.ItemId,
                     Name = item.Name,
@@ -234,11 +234,11 @@ namespace FastFoodRestaurant.Services.Order
 
             var allOrderHistory = Orders(orders);
 
-            List<OrderHistoryModel> ordersHistoryList = new List<OrderHistoryModel>();
+            List<OrderHistoryModel> ordersHistoryList = new();
             foreach (var order in allOrderHistory)
             {
 
-                OrderHistoryModel aohm = new OrderHistoryModel();
+                OrderHistoryModel aohm = new();
 
                 aohm.FullPrice = order.Model.FullPrice;
                 aohm.Items = order.Model.Items;
@@ -265,7 +265,7 @@ namespace FastFoodRestaurant.Services.Order
 
             var orderHisory = Orders(orders);
 
-            List<OrderHistoryModel> orderHistoryList = new List<OrderHistoryModel>();
+            List<OrderHistoryModel> orderHistoryList = new();
 
             var userInfo = data.Clients.Where(x => x.Id == userId).Select(x => new InformationModel
             {
@@ -276,7 +276,7 @@ namespace FastFoodRestaurant.Services.Order
 
             foreach (var order in orderHisory)
             {
-                OrderHistoryModel ohm = new OrderHistoryModel();
+                OrderHistoryModel ohm = new();
                 ohm.FullPrice = order.Model.FullPrice;
                 ohm.Items = order.Model.Items;
                 ohm.OrderDate = order.Model.OrderDate;
@@ -310,11 +310,11 @@ namespace FastFoodRestaurant.Services.Order
         private List<OrderHistoryWithUserIdModel> Orders(List<Data.Models.Order> orders)
         {
 
-            List<OrderHistoryWithUserIdModel> allOrders = new List<OrderHistoryWithUserIdModel>();
+            List<OrderHistoryWithUserIdModel> allOrders = new();
             foreach (var order in orders)
             {
                 var quantityAndItemId = data.OrderItems.Where(x => x.OrderId == order.Id).Select(x => new { x.Quantity, x.ItemId }).ToList();
-                OrderHistoryWithUserIdModel ordersHistories = new OrderHistoryWithUserIdModel();
+                OrderHistoryWithUserIdModel ordersHistories = new();
 
                 foreach (var item in quantityAndItemId)
                 {

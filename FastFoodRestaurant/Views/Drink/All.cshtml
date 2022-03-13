@@ -5,16 +5,20 @@
         ViewData["Title"] = "Drinks";
     }
 
-    <style>
-        .form-inline {
-            display: -ms-flexbox;
-            display: flex;
-            -ms-flex-flow: row wrap;
-            flex-flow: row wrap;
-            -ms-flex-align: center;
-            align-items: center;
-        }
-    </style>
+    @section styles{
+
+        <style>
+            .form-inline {
+                display: -ms-flexbox;
+                display: flex;
+                -ms-flex-flow: row wrap;
+                flex-flow: row wrap;
+                -ms-flex-align: center;
+                align-items: center;
+            }
+        </style>
+    }
+    
 
     <div class="row">
         <div class="form-inline">
@@ -29,7 +33,7 @@
 
             <div class="form-check offset-2">
                 <input asp-for="AlcoholFreeOnly" class="form-check-input" type="checkbox">
-                <label  class="form-check-label col-7">
+                <label class="form-check-label col-7">
                     Alcohol free only!
                 </label>
             </div>
@@ -64,7 +68,7 @@
                     @if (User.IsInRole(AdminConstants.Administrator))
                     {
                     <a asp-area="Admin" asp-controller="Drink" asp-action="Delete" asp-route-id="@drink.Id" class="btn btn-danger float-right  ml-3">Delete</a>
-                    <a asp-area="Admin" asp-controller="Drink" asp-action="Edit" asp-route-id="@drink.Id" class="btn btn-warning float-left ml-3">Edit</a>
+                    <a asp-area="Admin" asp-controller="Drink" asp-action="Edit" asp-route-id="@drink.Id"  class="btn btn-warning float-left ml-3">Edit</a>
                     }
                     else
                     {

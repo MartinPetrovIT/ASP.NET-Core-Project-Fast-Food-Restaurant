@@ -4,8 +4,8 @@
     ViewData["Title"] = "Menu";
 }
 
+@section styles{
 
-<form method="get">
     <style>
         .form-inline {
             display: -ms-flexbox;
@@ -16,8 +16,9 @@
             align-items: center;
         }
     </style>
+}
+<form method="get">
     <div class="row">
-
         <div class="col-md-2 offset-2 mb-3 mt-1">
             <div class="form-group">
                 <label asp-for="Category"></label>
@@ -75,11 +76,11 @@
                     @if (User.IsInRole(AdminConstants.Administrator))
                     {
                         <a asp-area="Admin" asp-controller="Food" asp-action="Delete" asp-route-id="@food.Id" class="btn btn-danger float-right  ml-3">Delete</a>
-                        <a asp-area="Admin"  asp-controller="Food"  asp-action="Edit" asp-route-id="@food.Id" class="btn btn-warning float-left ml-3">Edit</a>
+                        <a asp-area="Admin" asp-controller="Food" asp-action="Edit" asp-route-id="@food.Id" class="btn btn-warning float-left ml-3">Edit</a>
                     }
                     else
                     {
-                    <a asp-controller="Order" asp-action="OrderNow" asp-route-itemId="@food.ItemId" class="btn btn-primary">Order now</a>
+                        <a asp-controller="Order" asp-action="OrderNow" asp-route-itemId="@food.ItemId" class="btn btn-primary">Order now</a>
                     }
                 </div>
             </div>

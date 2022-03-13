@@ -7,5 +7,9 @@
 
         public const string GlobalMessageKey = "GlobalMessage";
 
+        public class Cache
+        {
+            public const string LatestFoodsCacheKey = nameof(LatestFoodsCacheKey);
+        }
     }
 }
