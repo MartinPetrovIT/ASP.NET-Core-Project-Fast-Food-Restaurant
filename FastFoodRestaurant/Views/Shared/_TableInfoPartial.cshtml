@@ -1,0 +1,50 @@
+﻿@model List<OrderHistoryModel>
+@using System.Text;
+
+
+
+@foreach (var item1 in Model)
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Order Date - @item1.OrderDate.ToString("dd/MM/yyyy HH:mm")</th>
+                <th scope="col">Items</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price (FullPrice - @item1.FullPrice.ToString("F2"))</th>
+            </tr>
+        </thead>
+
+        @foreach (var item in item1.Items)
+        {
+
+            <tbody>
+                <tr>
+                    <th row"1"></th>
+                    <td>@item.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("F2")</td>
+
+            </tbody>
+        }
+        @{
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine($"Name: {item1.ClientInfoModel.Name}");
+            sb.AppendLine($"Phone: {item1.ClientInfoModel.PhoneNumber}");
+            sb.AppendLine($"Address: {item1.ClientInfoModel.Address}");
+
+        }
+    </table>
+
+
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label" readonly>Client Information</label>
+        <textarea readonly class="form-control" id="exampleFormControlTextarea1" rows="3">@sb.ToString()</textarea>
+    </div>
+
+}
+
+
+

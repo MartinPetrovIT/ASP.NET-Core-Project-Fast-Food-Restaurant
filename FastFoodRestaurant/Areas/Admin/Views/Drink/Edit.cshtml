@@ -1,0 +1,19 @@
+﻿
+@model DrinkFormModel
+
+@{
+    ViewData["Title"] = "Edit Drink";
+}
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="heading-margin text-center">Edit Drink</h2>
+
+        <partial name="_DrinkFormPartial" model="@Model" />
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

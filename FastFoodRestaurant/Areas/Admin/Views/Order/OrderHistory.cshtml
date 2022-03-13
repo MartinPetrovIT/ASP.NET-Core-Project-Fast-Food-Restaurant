@@ -1,0 +1,42 @@
+﻿@model List<OrderHistoryModel>
+@using System.Text;
+@{
+    ViewData["Title"] = "Order History";
+}
+
+@section styles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
+}
+
+
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="heading-margin text-center">Order history</h2>
+
+        <partial name="_DatePickerPartial" />
+
+        <partial name="_TableInfoPartial" model="@Model" />
+
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="jumbotron jumbotron-fluid col-12">
+            <div class="container">
+                <h1 class="display-4 text-center">No orders on this date</h1>
+            </div>
+        </div>
+    }
+
+
+</div>
+
+
+
+
+
+@section scripts{
+
+    <partial name="_DatePickerScriptsPartial" />
+}
