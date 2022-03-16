@@ -5,7 +5,7 @@
 }
 
 @section styles{
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" type="text/css" />
 }
 
 
@@ -14,7 +14,11 @@
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <h2 class="heading-margin text-center">Order history</h2>
 
-        <partial name="_DatePickerPartial" />
+        <form asp-controller="Order" asp-action="OrderHistory" method="get">
+
+            <partial name="_DatePickerPartial" />
+
+        </form>
 
         <partial name="_TableInfoPartial" model="@Model" />
 
@@ -38,5 +42,5 @@
 
 @section scripts{
 
-    <partial name="_DatePickerScriptsPartial" />
+<partial name="_DatePickerScriptsPartial" />
 }

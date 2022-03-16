@@ -15,7 +15,12 @@
     <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
         <h2 class="heading-margin text-center">My order history</h2>
 
-        <partial name="_DatePickerPartial" />
+       
+        <form asp-controller="Order" asp-action="MyOrderHistory" method="get">
+
+            <partial name="_DatePickerPartial" />
+
+        </form>
 
         <partial name="_TableInfoPartial" model="@Model" />
     </div>

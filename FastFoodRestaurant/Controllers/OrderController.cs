@@ -20,13 +20,13 @@ namespace FastFoodRestaurant.Controllers
         }
         private readonly IClientService clientService;
         private readonly IOrderService orderService;
-       
 
 
-      
 
-     
 
+
+
+         [Authorize]
         public  IActionResult OrderNow(int itemId)
         {
            
@@ -47,7 +47,7 @@ namespace FastFoodRestaurant.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-     
+        [Authorize]
         public IActionResult Cart(OrderListingModel orderModel)
         {
            
@@ -81,6 +81,7 @@ namespace FastFoodRestaurant.Controllers
             return RedirectToAction("Information", "Client");
         }
 
+        [Authorize]
         public IActionResult PlusQuantity(int itemId, int orderId)
         {
             var oi = orderService.PlusQuantity(itemId, orderId);
@@ -91,6 +92,8 @@ namespace FastFoodRestaurant.Controllers
 
             return RedirectToAction("Cart", "Order");
         }
+
+        [Authorize]
         public IActionResult MinusQuantity(int itemId, int orderId)
         {
             var oi = orderService.MinusQuantity(itemId, orderId);
@@ -108,6 +111,8 @@ namespace FastFoodRestaurant.Controllers
 
             return RedirectToAction("Cart", "Order");
         }
+
+        [Authorize]
         public IActionResult Remove(int itemId, int orderId)
         {
             var oi = orderService.Remove(itemId, orderId);
@@ -119,17 +124,7 @@ namespace FastFoodRestaurant.Controllers
             return RedirectToAction("Cart", "Order");
         }
 
-
-        //public IActionResult MyOrderHistory()
-        //{
-        //    var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-
-        //    var allOrders = orderService.MyOrderHistory(userId);
-
-        //    return View(allOrders);
-        //}
-
-       
+        [Authorize]
         public IActionResult MyOrderHistory(string dDate)
         {
             if (dDate is null)
@@ -145,6 +140,7 @@ namespace FastFoodRestaurant.Controllers
 
             return View(filteredOrders);
         }
+        [Authorize]
         public IActionResult CompleteOrder(int orderId, decimal totalSum)
         {
             

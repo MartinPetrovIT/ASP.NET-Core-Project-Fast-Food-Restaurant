@@ -58,11 +58,6 @@ namespace FastFoodRestaurant.Controllers
 
         }
 
-        public IActionResult Order(Item item)
-        {
-
-            return View();
-        }
 
     }
 }

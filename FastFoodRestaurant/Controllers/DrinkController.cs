@@ -15,7 +15,6 @@ namespace FastFoodRestaurant.Controllers
         private readonly IDrinkService drinks;
 
        
-
         public IActionResult All(
             string searchTerm,
             bool alcoholFreeOnly)
