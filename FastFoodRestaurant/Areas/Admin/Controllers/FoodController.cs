@@ -27,6 +27,7 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
 
         [HttpPost]
         [Authorize(Roles = AdminConstants.Administrator)]
+        [HttpPost]
         public IActionResult Add(FoodFormModel foodFromModel)
         {
       

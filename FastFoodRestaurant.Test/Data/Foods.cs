@@ -1,6 +1,9 @@
-﻿using FastFoodRestaurant.Data.Models;
+﻿using FastFoodRestaurant.Areas.Admin.Models.Food;
+using FastFoodRestaurant.Data.Models;
 using FastFoodRestaurant.Models.Food;
+using FastFoodRestaurant.Models.FoodCategory;
 using FastFoodRestaurant.Services.Food;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,12 +26,28 @@ namespace FastFoodRestaurant.Test.Data
 
         public static FoodSearchModel FoodSearchModel
         => new FoodSearchModel()
-            {
-                Categories = new string[] { foodServiceCategoryNameZ, foodServiceCategoryNameX},
-                CurrentPage = 1,
-                Food = TenFoodListingModels
+        {
+            Categories = new string[] { foodServiceCategoryNameZ, foodServiceCategoryNameX },
+            CurrentPage = 1,
+            Food = TenFoodListingModels
         };
 
+        public static List<FoodCategoryModel> FoodCategoryModelList
+     => Enumerable.Range(0, 10).Select(x => new FoodCategoryModel()).ToList();
 
-    }
+
+        public static FoodFormModel FoodFormModel(string name, decimal price, string description)
+     => new()
+     {
+         Name = name,
+         Description = description,
+         Price = price,
+         CategoryId = 1,
+         ImageUrl = "http://www.sulitest.org/files/source/logo%20test%20horiz%20bis.png?1574185700651",
+         //Categories = FoodCategoryModelList
+     };
+
+        public static List<FoodCategory> FoodCategories
+  => Enumerable.Range(0, 1).Select(x => new FoodCategory() { Id = 1 }).ToList();
+}
 }

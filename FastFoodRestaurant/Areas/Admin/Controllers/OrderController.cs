@@ -1,6 +1,8 @@
 ﻿using FastFoodRestaurant.Services.Order;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using static FastFoodRestaurant.Areas.Admin.AdminConstants;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +17,7 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
         }
         private readonly IOrderService order;
 
+        [Authorize(Roles = Administrator)]
         public IActionResult OrderHistory(string dDate)
         {
             if (dDate is null)
@@ -24,8 +27,7 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
 
             var model = order.OrderHistory();
 
-            order.FilterDate(model, dDate);
-
+            
             return View(order.FilterDate(model, dDate));
         }
     }
