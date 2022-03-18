@@ -293,10 +293,13 @@ namespace FastFoodRestaurant.Services.Order
 
         public List<OrderHistoryModel> FilterDate(List<OrderHistoryModel> collection, string stringDate)
         {
-
-            var date = Convert.ToDateTime(
+     
+           
+              var date = Convert.ToDateTime(
                 DateTime.ParseExact(stringDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
                         .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture));
+           
+            
 
 
 

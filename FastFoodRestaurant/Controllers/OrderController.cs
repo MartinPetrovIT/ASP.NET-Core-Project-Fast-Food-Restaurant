@@ -75,6 +75,7 @@ namespace FastFoodRestaurant.Controllers
             return View(orderModel);
         }
 
+        [Authorize]
         public IActionResult ChangeInformation()
         {
 
@@ -105,8 +106,8 @@ namespace FastFoodRestaurant.Controllers
             if (oi == false)
             {
                
+                TempData[WebConstants.GlobalWarningMessageKey] = "If you want to remove item click remove button!";
                 return RedirectToAction("Cart", "Order");
-                //TODO: Some message to click remove button
             }
 
             return RedirectToAction("Cart", "Order");
@@ -136,7 +137,17 @@ namespace FastFoodRestaurant.Controllers
            
             var allOrders = orderService.MyOrderHistory(userId);
 
-            var filteredOrders = orderService.FilterDate(allOrders, dDate);
+            List<OrderHistoryModel> filteredOrders;
+            try
+            {
+                filteredOrders = orderService.FilterDate(allOrders, dDate);
+            }
+            catch (Exception)
+            {
+                dDate = DateTime.UtcNow.ToString("dd/MM/yyyy");
+                filteredOrders = orderService.FilterDate(allOrders, dDate);
+                TempData[WebConstants.GlobalWarningMessageKey] = "Invalid date!";
+            }
 
             return View(filteredOrders);
         }

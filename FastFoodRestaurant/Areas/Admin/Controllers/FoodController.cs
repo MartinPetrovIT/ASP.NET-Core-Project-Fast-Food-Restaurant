@@ -30,16 +30,16 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Add(FoodFormModel foodFromModel)
         {
-      
-            if (!ModelState.IsValid)
-            {
-                foodFromModel.Categories = foods.GetFoodCategories();
-                return View(foodFromModel);
-            }
 
             if (!foods.CheckCategoryId(foodFromModel.CategoryId))
             {
                 ModelState.AddModelError(nameof(foodFromModel), "Category does not exist!");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                foodFromModel.Categories = foods.GetFoodCategories();
+                return View(foodFromModel);
             }
 
             var itemId = items.Add(foodFromModel.Name, foodFromModel.Price);
@@ -71,16 +71,19 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Edit(FoodFormModel editedModel, int id)
         {
+
+
+            if (!foods.CheckCategoryId(editedModel.CategoryId))
+            {
+                ModelState.AddModelError(nameof(editedModel), "Category does not exist!");
+            }
+
             if (!ModelState.IsValid)
             {
                 editedModel.Categories = foods.GetFoodCategories();
                 return View(editedModel);
             }
 
-            if (!foods.CheckCategoryId(editedModel.CategoryId))
-            {
-                ModelState.AddModelError(nameof(editedModel), "Category does not exist!");
-            }
 
             var itemId = foods.EditFood(
                 id,

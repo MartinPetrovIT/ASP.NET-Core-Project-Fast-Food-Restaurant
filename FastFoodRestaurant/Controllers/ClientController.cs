@@ -24,21 +24,27 @@ namespace FastFoodRestaurant.Controllers
                 return View(informationModel);
             }
 
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+          
 
-            if (userId == null)
+            string userId;
+
+            try
             {
+                userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            }
+            catch (System.Exception)
+            {
+
                 return NotFound();
             }
-            else
-            {
-                clientService.SetInformation(
+
+            clientService.SetInformation(
                     userId, 
                     informationModel.Name, 
                     informationModel.PhoneNumber, 
                     informationModel.Address);
 
-            }
+            
 
             return RedirectToAction("Index","Home");
         }
@@ -46,12 +52,18 @@ namespace FastFoodRestaurant.Controllers
         [Authorize]
         public IActionResult Information()
         {
-            var userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            string userId;
 
-            if (userId == null)
+            try
             {
+                 userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            }
+            catch (System.Exception)
+            {
+
                 return NotFound();
             }
+           
             var model = clientService.ShowInformation(userId);
 
             return View(model);

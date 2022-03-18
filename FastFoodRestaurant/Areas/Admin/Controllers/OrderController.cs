@@ -6,6 +6,7 @@ using static FastFoodRestaurant.Areas.Admin.AdminConstants;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FastFoodRestaurant.Models.Order;
 
 namespace FastFoodRestaurant.Areas.Admin.Controllers
 {
@@ -27,8 +28,19 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
 
             var model = order.OrderHistory();
 
-            
-            return View(order.FilterDate(model, dDate));
+            List<OrderHistoryModel> filteredOrders;
+            try
+            {
+                filteredOrders = order.FilterDate(model, dDate);
+            }
+            catch (Exception)
+            {
+                dDate = DateTime.UtcNow.ToString("dd/MM/yyyy");
+                filteredOrders = order.FilterDate(model, dDate);
+                TempData[WebConstants.GlobalWarningMessageKey] = "Invalid date!";
+            }
+
+            return View(filteredOrders);
         }
     }
 }
