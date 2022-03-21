@@ -50,7 +50,13 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
         [Authorize(Roles = AdminConstants.Administrator)]
         public IActionResult Edit(int id)
         {
+            
             var drinkModel = drinks.ShowDrinkToEdit(id);
+
+            if (drinkModel == null)
+            {
+                return NotFound();
+            }
 
             return View(drinkModel);
         }

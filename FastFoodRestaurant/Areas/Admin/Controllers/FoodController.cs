@@ -60,9 +60,18 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
         [Authorize(Roles = AdminConstants.Administrator)]
         public IActionResult Edit(int id)
         {
-            
+            FoodFormModel foodModel;
+            try
+            {
+                foodModel = foods.ShowFoodToEdit(id);
+            }
+            catch (System.Exception)
+            {
 
-            var foodModel = foods.ShowFoodToEdit(id);
+                return NotFound();
+            }
+
+          
 
             return View(foodModel);
         }
