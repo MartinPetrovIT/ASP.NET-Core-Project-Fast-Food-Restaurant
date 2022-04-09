@@ -16,12 +16,11 @@ namespace FastFoodRestaurant.Data.Models
         public string Name { get; set; }
 
         [Required]
-        [Url]
-        public string ImageUrl { get; set; }
+        public string ImageFileName{ get; set; }
 
         [Required]
         public string Description { get; set; }
- 
+        
         public decimal Price { get; set; }
 
         public int CategoryId { get; set; }

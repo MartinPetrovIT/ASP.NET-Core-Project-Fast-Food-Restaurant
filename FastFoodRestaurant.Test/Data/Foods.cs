@@ -29,7 +29,7 @@ namespace FastFoodRestaurant.Test.Data
             Name = "Test Food",
             Price = 1.00M,
             Description = "Test Food Description",
-            ImageUrl = "http://www.sulitest.org/files/source/logo%20test%20horiz%20bis.png?1574185700651",
+            ImageFileName = "http://www.sulitest.org/files/source/logo%20test%20horiz%20bis.png?1574185700651",
             ItemId = id,
 
 
@@ -54,8 +54,7 @@ namespace FastFoodRestaurant.Test.Data
          Name = name,
          Description = description,
          Price = price,
-         CategoryId = 1,
-         ImageUrl = "http://www.sulitest.org/files/source/logo%20test%20horiz%20bis.png?1574185700651",
+         CategoryId = 1
          //Categories = FoodCategoryModelList
      };
 
@@ -66,7 +65,6 @@ namespace FastFoodRestaurant.Test.Data
         Description = description,
         Price = price,
         CategoryId = categoryId,
-        ImageUrl = "http://www.sulitest.org/files/source/logo%20test%20horiz%20bis.png?1574185700651",
          //Categories = FoodCategoryModelList
      };
 

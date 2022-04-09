@@ -2,6 +2,7 @@
 using FastFoodRestaurant.Models.Food;
 using FastFoodRestaurant.Models.FoodCategory;
 using FastFoodRestaurant.Models.Home;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace FastFoodRestaurant.Services.Food
@@ -18,7 +19,7 @@ namespace FastFoodRestaurant.Services.Food
 
         void Add(
             string name,
-            string imageUrl,
+            IFormFile image,
             decimal price,
             string description,
             int categoryId,
@@ -27,7 +28,7 @@ namespace FastFoodRestaurant.Services.Food
         int EditFood(
             int foodId,
             string name,
-            string imageUrl,
+            IFormFile image,
             decimal price,
             string description,
             int categoryId);

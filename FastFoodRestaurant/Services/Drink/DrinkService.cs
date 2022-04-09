@@ -1,21 +1,29 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using FastFoodRestaurant.Areas.Admin.Models.Drink;
+using FastFoodRestaurant.Infrastructure;
 using FastFoodRestaurant.Models.Drink;
+using FastFoodRestaurant.Services.Image;
 using FastFoodResturant.Data;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 using System.Linq;
+using static FastFoodRestaurant.Infrastructure.ApplicationBuilderExtensions;
 
 namespace FastFoodRestaurant.Services.Drink
 {
     public class DrinkService : IDrinkService
     {
-        public DrinkService(ApplicationDbContext data, IMapper mapper)
+
+        public DrinkService(ApplicationDbContext data, IMapper mapper, IImageService imageService)
         {
             this.data = data;
             this.mapper = mapper;
+            this.imageService = imageService;
         }
         private readonly ApplicationDbContext data;
         private readonly IMapper mapper;
+        private readonly IImageService imageService;
         public DrinkSearchModel All(string searchTerm, bool alcoholFreeOnly)
         {
             var drinkQuery = data.Drinks.AsQueryable();
@@ -46,16 +54,19 @@ namespace FastFoodRestaurant.Services.Drink
 
         public void Add(
             string name,
-            string imageUrl, 
             decimal price, 
+            IFormFile image,
             bool isAlcoholic, 
             int itemId)
         {
+
+            var path = imageService.Upload(image);
+
             var drink = new Data.Models.Drink()
             {
                 Name = name,
-                ImageUrl = imageUrl,
                 Price = price,
+                ImageFileName = path,
                 IsAlcoholic = isAlcoholic,
                 ItemId = itemId
 
@@ -73,7 +84,7 @@ namespace FastFoodRestaurant.Services.Drink
         {
             var drinkModel = data.Drinks.Where(x => x.Id == drinkId)
                 .ProjectTo<DrinkFormModel>(mapper.ConfigurationProvider)
-                .FirstOrDefault();
+                .FirstOrDefault();  
 
             return drinkModel;
 
@@ -81,15 +92,27 @@ namespace FastFoodRestaurant.Services.Drink
 
         public int EditDrink( int id,
             string name,
-            string imageUrl,
             decimal price,
+            IFormFile image,
             bool isAlcoholic)
         {
+
+            var path = "";
+
             var drink = data.Drinks.Where(x => x.Id == id).FirstOrDefault();
+            if (image is null)
+            {
+                path = drink.ImageFileName;
+            }
+            else
+            {
+                path = imageService.Upload(image);
+                imageService.DeleteImage(drink.ImageFileName);
+            }
 
             drink.Name = name;
-            drink.ImageUrl = imageUrl;
             drink.Price = price;
+            drink.ImageFileName = path;
             drink.IsAlcoholic = isAlcoholic;
 
             data.SaveChanges();
@@ -101,6 +124,8 @@ namespace FastFoodRestaurant.Services.Drink
         {
             var drink = data.Drinks.Where(x => x.Id == id).FirstOrDefault();
             var itemId = drink.ItemId;
+
+            imageService.DeleteImage(drink.ImageFileName);
 
             data.Drinks.Remove(drink);
 

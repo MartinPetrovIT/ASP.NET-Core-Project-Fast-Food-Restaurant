@@ -8,6 +8,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using FastFoodRestaurant.Models.Order;
 
+using static FastFoodRestaurant.WebConstants;
+
 namespace FastFoodRestaurant.Areas.Admin.Controllers
 {
     public class OrderController : AdminController
@@ -37,7 +39,7 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
             {
                 dDate = DateTime.UtcNow.ToString("dd/MM/yyyy");
                 filteredOrders = order.FilterDate(model, dDate);
-                TempData[WebConstants.GlobalWarningMessageKey] = "Invalid date!";
+                TempData[GlobalWarningMessageKey] = InvalidDate;
             }
 
             return View(filteredOrders);

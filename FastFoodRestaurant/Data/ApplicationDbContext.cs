@@ -43,8 +43,10 @@ namespace FastFoodResturant.Data
 
         
 
-            builder.Entity<Food>().Property("Price").HasColumnType("decimal(5, 2)");
-           builder.Entity<Drink>().Property("Price").HasColumnType("decimal(5, 2)");
+            builder.Entity<Food>().Property("Price").HasColumnType("decimal(8, 2)");
+           builder.Entity<Drink>().Property("Price").HasColumnType("decimal(8, 2)");
+           builder.Entity<Item>().Property("Price").HasColumnType("decimal(8, 2)");
+           builder.Entity<Order>().Property("TotalSum").HasColumnType("decimal(10, 2)");
 
 
 

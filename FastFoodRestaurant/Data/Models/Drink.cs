@@ -15,8 +15,7 @@ namespace FastFoodRestaurant.Data.Models
         public string Name { get; set; }
 
         [Required]
-        [Url]
-        public string ImageUrl { get; set; }
+        public string ImageFileName { get; set; }
 
 
         public decimal Price { get; set; }

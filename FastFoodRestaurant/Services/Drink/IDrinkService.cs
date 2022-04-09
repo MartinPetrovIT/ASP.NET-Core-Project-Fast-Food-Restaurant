@@ -1,5 +1,6 @@
 ﻿using FastFoodRestaurant.Areas.Admin.Models.Drink;
 using FastFoodRestaurant.Models.Drink;
+using Microsoft.AspNetCore.Http;
 
 namespace FastFoodRestaurant.Services.Drink
 {
@@ -11,16 +12,16 @@ namespace FastFoodRestaurant.Services.Drink
 
         void Add(
             string name,
-            string imageUrl,
             decimal price,
+            IFormFile image,
             bool isAlcoholic,
             int itemId);
 
         int EditDrink(int id,
-             string name,
-             string imageUrl,
-             decimal price,
-             bool isAlcoholic);
+              string name,
+            decimal price,
+            IFormFile image,
+            bool isAlcoholic);
 
         int Delete(int id);
 

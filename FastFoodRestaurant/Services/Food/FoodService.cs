@@ -3,7 +3,9 @@ using AutoMapper.QueryableExtensions;
 using FastFoodRestaurant.Areas.Admin.Models.Food;
 using FastFoodRestaurant.Models.Food;
 using FastFoodRestaurant.Models.Home;
+using FastFoodRestaurant.Services.Image;
 using FastFoodResturant.Data;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,10 +17,13 @@ namespace FastFoodRestaurant.Services.Food
 
         private readonly IMapper mapper;
 
-        public FoodService(ApplicationDbContext data, IMapper mapper)
+        private readonly IImageService imageService;
+
+        public FoodService(ApplicationDbContext data, IMapper mapper, IImageService imageService)
         {
             this.data = data;
             this.mapper = mapper;
+            this.imageService = imageService;
         }
         
         public FoodSearchModel All(
@@ -78,18 +83,19 @@ namespace FastFoodRestaurant.Services.Food
 
        void IFoodService.Add(
             string name,
-            string imageUrl,
+            IFormFile image,
             decimal price,
             string description,
             int categoryId,
             int itemId)
         {
-           
+
+            var path = imageService.Upload(image);
 
             var food = new Data.Models.Food()
             {
                 Name = name,
-                ImageUrl = imageUrl,
+                ImageFileName = path,
                 Price = price,
                 Description = description,
                 CategoryId = categoryId,
@@ -132,16 +138,27 @@ namespace FastFoodRestaurant.Services.Food
 
         }
 
-        public int EditFood(int foodId, string name, string imageUrl, decimal price, string description, int categoryId)
+        public int EditFood(int foodId, string name, IFormFile image, decimal price, string description, int categoryId)
         {
 
             var listOfCategories = GetFoodCategories();
 
 
+            var path = "";
+
             var foodModel = data.Foods.Where(x => x.Id == foodId).FirstOrDefault();
+            if (image is null)
+            {
+                path = foodModel.ImageFileName;
+            }
+            else
+            {
+                path = imageService.Upload(image);
+                imageService.DeleteImage(foodModel.ImageFileName);
+            }
 
             foodModel.Name = name;
-            foodModel.ImageUrl = imageUrl;
+            foodModel.ImageFileName = path;
             foodModel.Price = price;
             foodModel.Description = description;
             foodModel.CategoryId = categoryId;

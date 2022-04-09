@@ -47,13 +47,12 @@
 </form>
 
 
-
 <div class="row">
     @foreach (var drink in Model.Drink)
     {
         <div class="col-md-3 mb-1">
             <div class="card">
-                <img height="200" width="100" class="card-img-top" src="@drink.ImageUrl" alt="Card image cap">
+                <img height="200" width="100" class="card-img-top" src="~/img/@drink.ImageFileName" alt="Card image cap">
                 <div class="card-body">
                     @if (drink.IsAlcoholic == true)
                     {

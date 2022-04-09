@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -46,7 +47,6 @@ namespace FastFoodRestaurant.Infrastructure
                 new FoodCategory {Name = "Chickens" },
                 new FoodCategory {Name = "Pasta" },
                 new FoodCategory {Name = "Salads" },
-                new FoodCategory {Name = "Starters" },
                 new FoodCategory {Name = "Desserts" }
 
 
@@ -55,6 +55,8 @@ namespace FastFoodRestaurant.Infrastructure
 
             data.SaveChanges();
         }
+
+       
 
         private static void SeedAdministrator(IServiceProvider services)
         {

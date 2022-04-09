@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,13 +13,11 @@ namespace FastFoodRestaurant.Areas.Admin.Models.Drink
         [StringLength(maxDrinkNameLength, MinimumLength = minDrinkNameLength)]
         public string Name { get; set; }
 
-        [Required]
-        [Url]
-        [Display(Name = "Image Url")]
-        public string ImageUrl { get; set; }
-
         [Range(minPrice,maxPrice)]
         public decimal Price { get; set; }
+
+        
+        public IFormFile Image{ get; set; }
 
         public bool IsAlcoholic { get; init; }
     }

@@ -4,6 +4,7 @@ using FastFoodRestaurant.Infrastructure;
 using FastFoodRestaurant.Services.Client;
 using FastFoodRestaurant.Services.Drink;
 using FastFoodRestaurant.Services.Food;
+using FastFoodRestaurant.Services.Image;
 using FastFoodRestaurant.Services.Item;
 using FastFoodRestaurant.Services.Order;
 using FastFoodResturant.Data;
@@ -66,6 +67,7 @@ namespace FastFoodResturant
             services.AddTransient<IDrinkService, DrinkService>();
             services.AddTransient<IClientService, ClientService>();
             services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IImageService, ImageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

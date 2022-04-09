@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using static FastFoodRestaurant.WebConstants;
 
 namespace FastFoodRestaurant.Controllers
 {
@@ -37,12 +38,12 @@ namespace FastFoodRestaurant.Controllers
                 clientInfo.Name == null ||
                 clientInfo.PhoneNumber == null)
             {
-                TempData[WebConstants.GlobalWarningMessageKey] = "You should add order information, before make an order!";
+                TempData[GlobalWarningMessageKey] = OrderInformationSholdbeaddedBeforeMakeAnOrder;
                 return RedirectToAction("Information", "Client");
             }
             orderService.OrderNow(userId, itemId);
 
-            TempData[WebConstants.GlobalMessageKey] = "The item is added to your cart!";
+            TempData[GlobalMessageKey] = ItemIsAdded;
 
             return RedirectToAction("Index", "Home");
         }
@@ -57,7 +58,7 @@ namespace FastFoodRestaurant.Controllers
         clientInfo.Name == null ||
         clientInfo.PhoneNumber == null)
             {
-                TempData[WebConstants.GlobalWarningMessageKey] = "You should add order information, before add item in cart!";
+                TempData[GlobalWarningMessageKey] = OrderInformationSholdbeaddedBeforeMakeAnOrder;
                 return RedirectToAction("Information", "Client");
             }
             var flag = orderService.Cart(userId, orderModel);
@@ -106,7 +107,7 @@ namespace FastFoodRestaurant.Controllers
             if (oi == false)
             {
                
-                TempData[WebConstants.GlobalWarningMessageKey] = "If you want to remove item click remove button!";
+                TempData[GlobalWarningMessageKey] = ClickRemoveButton;
                 return RedirectToAction("Cart", "Order");
             }
 
@@ -146,7 +147,7 @@ namespace FastFoodRestaurant.Controllers
             {
                 dDate = DateTime.UtcNow.ToString("dd/MM/yyyy");
                 filteredOrders = orderService.FilterDate(allOrders, dDate);
-                TempData[WebConstants.GlobalWarningMessageKey] = "Invalid date!";
+                TempData[GlobalWarningMessageKey] = InvalidDate;
             }
 
             return View(filteredOrders);
@@ -169,12 +170,12 @@ namespace FastFoodRestaurant.Controllers
 
             if (flag == false)
             {
-                TempData[WebConstants.GlobalWarningMessageKey] = "Order price can not be 0.00 and all information fields must be filled!";
+                TempData[GlobalWarningMessageKey] = OrderPriceAndAllFeildsMustBeFilled;
 
                 return RedirectToAction("Cart", "Order");  
             }
 
-            TempData[WebConstants.GlobalMessageKey] = "Your order is completed!";
+            TempData[GlobalMessageKey] = CompletedOrder;
 
             return RedirectToAction("Index", "Home");
         }
