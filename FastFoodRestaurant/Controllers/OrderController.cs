@@ -69,7 +69,7 @@ namespace FastFoodRestaurant.Controllers
             }
             if (flag == true)
             {
-              orderModel.InformationModel = clientService.ShowInformation(userId);
+              orderModel.InformationModel = clientInfo;
             }
 
 
@@ -137,6 +137,7 @@ namespace FastFoodRestaurant.Controllers
 
            
             var allOrders = orderService.MyOrderHistory(userId);
+            
 
             List<OrderHistoryModel> filteredOrders;
             try

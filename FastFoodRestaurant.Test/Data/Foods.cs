@@ -22,15 +22,14 @@ namespace FastFoodRestaurant.Test.Data
         public static List<FoodServiceListingModel> TenFoodListingModels
          => Enumerable.Range(0, 10).Select(i => new FoodServiceListingModel()).ToList();
 
-        public static Food FoodWithData(int id)
+        public static Food FoodWithData
         => new()
         {
-            Id = id,
-            Name = "Test Food",
+            Id = 5,
+            Name = "TestFood",
             Price = 1.00M,
             Description = "Test Food Description",
-            ImageFileName = "http://www.sulitest.org/files/source/logo%20test%20horiz%20bis.png?1574185700651",
-            ItemId = id,
+            ItemId = 6,
 
 
         };

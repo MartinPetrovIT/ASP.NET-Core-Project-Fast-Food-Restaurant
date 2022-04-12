@@ -166,9 +166,11 @@ namespace FastFoodRestaurant.Services.Order
         public bool? Cart(string userId, OrderListingModel orderModel)
         {
 
-            var clientOrders = data.Orders.Where(x => x.Client.Id == userId).ToList();
+            var clientOrder = data.Orders.Where(x => 
+            x.Client.Id == userId && 
+            x.IsCompleted == false)
+                .FirstOrDefault();
 
-            var clientOrder = clientOrders.Where(x => x.IsCompleted == false).FirstOrDefault();
 
             var clientInfoModel = client.ShowInformation(userId);
 
@@ -330,7 +332,6 @@ namespace FastFoodRestaurant.Services.Order
 
                     }).FirstOrDefault();
                     ordersHistories.Model.Items.Add(theItem);
-                    ordersHistories.Model.OrderDate = order.OrderDate;
                     ordersHistories.Model.ClientInfoModel.PhoneNumber = order.ClientPhone;
                     ordersHistories.Model.ClientInfoModel.Address = order.ClientAddress;
                     ordersHistories.Model.ClientInfoModel.Name = order.ClientName;
@@ -338,6 +339,7 @@ namespace FastFoodRestaurant.Services.Order
 
                 }
 
+                ordersHistories.Model.OrderDate = order.OrderDate;
                 ordersHistories.UserId = order.ClientId;
                 ordersHistories.Model.FullPrice = order.TotalSum;
 
@@ -353,7 +355,7 @@ namespace FastFoodRestaurant.Services.Order
 
         public bool? CompleteOrder(int orderId, decimal totalSum, string userId)
         {
-            var orderFromDb = data.Orders.Where(x => x.Id == orderId).FirstOrDefault();
+            var orderFromDb = data.Orders.Where(x => x.Id == orderId && x.ClientId == userId).FirstOrDefault();
 
             var infoModel = client.ShowInformation(userId);
 
