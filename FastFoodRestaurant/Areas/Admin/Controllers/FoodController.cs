@@ -31,7 +31,7 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
 
         [HttpPost]
         [Authorize(Roles = AdminConstants.Administrator)]
-        [HttpPost]
+        [RequestSizeLimit(10*1024*1024)]
         public IActionResult Add(FoodFormModel foodFromModel)
         {
             if (image.CheckImage(foodFromModel.Image) is false
@@ -86,8 +86,9 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
             return View(foodModel);
         }
 
-        [Authorize(Roles = AdminConstants.Administrator)]
         [HttpPost]
+        [Authorize(Roles = AdminConstants.Administrator)]
+        [RequestSizeLimit(10 * 1024 * 1024)]
         public IActionResult Edit(FoodFormModel editedModel, int id)
         {
             if (image.CheckImage(editedModel.Image) is false)

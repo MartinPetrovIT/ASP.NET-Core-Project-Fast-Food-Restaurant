@@ -31,6 +31,7 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
 
         [HttpPost]
         [Authorize(Roles = AdminConstants.Administrator)]
+        [RequestSizeLimit(10 * 1024 * 1024)]
         public IActionResult Add(DrinkFormModel drinkFromModel)
         {
             if (image.CheckImage(drinkFromModel.Image) is false 
@@ -74,6 +75,7 @@ namespace FastFoodRestaurant.Areas.Admin.Controllers
         }
 
         [Authorize(Roles = AdminConstants.Administrator)]
+        [RequestSizeLimit(10 * 1024 * 1024)]
         [HttpPost]
         public IActionResult Edit(DrinkFormModel drinkFromModel, int id)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 
@@ -6,15 +7,16 @@ namespace FastFoodRestaurant.Services.Image
 {
     public class ImageService : IImageService
     {
+       
 
         public string Upload(IFormFile img)
         {
             string fileName = null;
             if (img != null)
             {
-                string uploadDir = "wwwroot/img";
+                string uploadDir = WebConstants.Image.UploadDirectory;
                 fileName = Guid.NewGuid().ToString() + "-" + img.FileName;
-                string path = $"{uploadDir}/{fileName}";
+                string path = Path.Combine(uploadDir, fileName);
 
                 using (var fileStream = new FileStream(path, FileMode.Create))
                 {
@@ -28,7 +30,7 @@ namespace FastFoodRestaurant.Services.Image
         }
         public void DeleteImage(string fileName)
         {
-            File.Delete($"wwwroot/img/{fileName}");
+            File.Delete($"{WebConstants.Image.UploadDirectory}/{fileName}");
 
         }
 

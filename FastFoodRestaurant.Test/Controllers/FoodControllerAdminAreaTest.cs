@@ -1,44 +1,45 @@
-﻿using MyTested.AspNetCore.Mvc;
+﻿using FastFoodRestaurant.Areas.Admin.Controllers;
+using MyTested.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using FastFoodRestaurant.Areas.Admin.Controllers;
-using static FastFoodRestaurant.Test.Data.Drinks;
-using FastFoodRestaurant.Areas.Admin.Models.Drink;
-using FastFoodRestaurant.Services.Image;
-using System.IO;
+using static FastFoodRestaurant.Test.Data.Foods;
 
 namespace FastFoodRestaurant.Test.Controllers
 {
-    public class DrinkControllerAdminAreaTest
+    public class FoodControllerAdminAreaTest
     {
-
+        
         [Theory]
         [InlineData("Administrator")]
         public void GETAddShouldReturnVIew(string adminRole)
         {
-            MyController<DrinkController>
+            MyController<FoodController>
                   .Instance()
                   .WithUser(a => a.InRole(adminRole))
+                  .WithData(TenFoodCategories)    
                   .Calling(c => c.Add())
                   .ShouldHave()
+                  .ValidModelState()
                   .ActionAttributes(a => a.RestrictingForAuthorizedRequests(adminRole))
                   .AndAlso()
                   .ShouldReturn()
-                  .View();
+                  .View(v => v.WithModelOfType<Areas.Admin.Models.Food.FoodFormModel>()
+                  .Passing(m => m.Categories.Count() == 10));
         }
 
         [Theory]
         [InlineData("Administrator")]
         public void POSTAddShouldReturnVIew(string adminRole)
         {
-            MyController<DrinkController>
+            MyController<FoodController>
                   .Instance()
                   .WithUser(a => a.InRole(adminRole))
-                  .Calling(c => c.Add(Data.Drinks.DrinkFormModel))
+                  .WithData(TenFoodCategories)
+                  .Calling(c => c.Add(FoodFormModelWIthData))
                   .ShouldHave()
                   .ValidModelState()
                   .ActionAttributes(a => a.RestrictingForAuthorizedRequests(adminRole)
@@ -47,29 +48,27 @@ namespace FastFoodRestaurant.Test.Controllers
                   .AndAlso()
                   .ShouldReturn()
                   .Redirect("/");
-
-
-
         }
 
         [Theory]
         [InlineData("Administrator")]
         public void GETEditShouldReturnVIew(string adminRole)
         {
-            MyController<DrinkController>
+            MyController<FoodController>
                   .Instance()
-                   .WithData(drink)
+                   .WithData(FoodWithData)
+                   .WithData(TenFoodCategories)
                   .WithUser(a => a.InRole(adminRole))
-                  .Calling(c => c.Edit(1))
+                  .Calling(c => c.Edit(5))
                   .ShouldHave()
                   .ValidModelState()
                   .ActionAttributes(a => a.RestrictingForAuthorizedRequests(adminRole))
                   .AndAlso()
                   .ShouldReturn()
-                  .View(v => v.WithModelOfType<DrinkFormModel>()
-                  .Passing(m => m.IsAlcoholic == drink.IsAlcoholic &&
-                  m.Price == drink.Price &&
-                  m.Name == drink.Name));
+                  .View(v => v.WithModelOfType<Areas.Admin.Models.Food.FoodFormModel>()
+                  .Passing(m => m.Name == FoodWithData.Name &&
+                  m.Price == FoodWithData.Price &&
+                  m.Description == FoodWithData.Description));
         }
 
 
@@ -77,12 +76,13 @@ namespace FastFoodRestaurant.Test.Controllers
         [InlineData("Administrator")]
         public void POSTEditShouldReturnRedirect(string adminRole)
         {
-            MyController<DrinkController>
+            MyController<FoodController>
                   .Instance()
                   .WithUser(a => a.InRole(adminRole))
-                  .WithData(drink)
+                  .WithData(TenFoodCategories)
+                  .WithData(FoodWithData)
                   .WithData(Data.Items.Item)
-                  .Calling(c => c.Edit(Data.Drinks.DrinkFormModelWithoutImage , 1))
+                  .Calling(c => c.Edit(Data.Foods.FoodFormModelWithoutImage, 5))
                   .ShouldHave()
                   .ValidModelState()
                   .ActionAttributes(a => a.RestrictingForAuthorizedRequests(adminRole)
@@ -93,16 +93,18 @@ namespace FastFoodRestaurant.Test.Controllers
                   .Redirect("/");
         }
 
+
         [Theory]
         [InlineData("Administrator")]
         public void DeleteShouldReturnRedirect(string adminRole)
         {
-            MyController<DrinkController>
+            MyController<FoodController>
                   .Instance()
                   .WithUser(a => a.InRole(adminRole))
-                  .WithData(drinkWithValidFileName)
+                  .WithData(TenFoodCategories)
+                  .WithData(FoodWithData)
                   .WithData(Data.Items.Item)
-                  .Calling(c => c.Delete(1))
+                  .Calling(c => c.Delete(5))
                   .ShouldHave()
                   .ValidModelState()
                   .ActionAttributes(a => a.RestrictingForAuthorizedRequests(adminRole))
@@ -110,5 +112,6 @@ namespace FastFoodRestaurant.Test.Controllers
                   .ShouldReturn()
                   .Redirect("/");
         }
+
     }
 }

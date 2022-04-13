@@ -22,14 +22,23 @@ namespace FastFoodRestaurant.Test.Data
         public static List<FoodServiceListingModel> TenFoodListingModels
          => Enumerable.Range(0, 10).Select(i => new FoodServiceListingModel()).ToList();
 
+
+
+        public static List<FoodCategory> TenFoodCategories
+             => Enumerable.Range(0, 10).Select(i => new FoodCategory() { Id = 1 + i }).ToList();
+
+
+
         public static Food FoodWithData
         => new()
         {
             Id = 5,
+            ImageFileName = Images.Image().FileName,
             Name = "TestFood",
             Price = 1.00M,
             Description = "Test Food Description",
-            ItemId = 6,
+            CategoryId = 1,
+            ItemId = 5,
 
 
         };
@@ -64,10 +73,26 @@ namespace FastFoodRestaurant.Test.Data
         Description = description,
         Price = price,
         CategoryId = categoryId,
-         //Categories = FoodCategoryModelList
-     };
+        //Categories = FoodCategoryModelList
+    };
 
-        public static List<FoodCategory> FoodCategories
-  => Enumerable.Range(0, 1).Select(x => new FoodCategory() { Id = 1 }).ToList();
-}
+        public static FoodFormModel FoodFormModelWIthData
+   => new()
+   {
+       Name = "TestName",
+       Description = "Test Description !",
+       Price = 1.00M,
+       CategoryId = 1,
+       Image = Images.Image()
+   };
+
+        public static FoodFormModel FoodFormModelWithoutImage
+          => new()
+          {
+              Name = "TestName",
+              Description = "Test Description !",
+              Price = 1.00M,
+              CategoryId = 1
+          };
+    }
 }

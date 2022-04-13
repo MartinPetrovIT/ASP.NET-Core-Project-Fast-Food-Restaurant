@@ -26,7 +26,7 @@ namespace FastFoodRestaurant.Test.Controllers
         }
 
         [Fact]
-        public void GETInformationShouldReturnCorrectModelWithView()
+        public void GETInformationShouldReturnCorrectModelWithViewAndData()
         {
 
             MyController<ClientController>

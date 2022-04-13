@@ -31,5 +31,11 @@
         {
             public const string LatestFoodsCacheKey = nameof(LatestFoodsCacheKey);
         }
+
+        public class Image
+        { 
+            public const string UploadDirectory = @"C:\ASP.NET-Core-Project-Fast-Food-Restaurant\FastFoodRestaurant\wwwroot\img";
+
+        }
     }
 }
