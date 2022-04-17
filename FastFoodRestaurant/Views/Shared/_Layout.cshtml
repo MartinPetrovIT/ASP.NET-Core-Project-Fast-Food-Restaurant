@@ -26,7 +26,8 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Drink" asp-action="All">Drinks</a>
                         </li>
-                        @if (User != null && !User.IsInRole(AdminConstants.Administrator))
+
+                        @if (!User.IsInRole(AdminConstants.Administrator) && User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Order" asp-action="MyOrderHistory">Order History</a>

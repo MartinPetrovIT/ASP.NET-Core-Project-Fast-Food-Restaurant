@@ -48,6 +48,9 @@ namespace FastFoodRestaurant.Test.Controllers
                   .ShouldReturn()
                   .Redirect("/");
 
+            File.Delete($"{WebConstants.Image.UploadDirectory}/{Data.Drinks.DrinkFormModel.Image.FileName}");
+
+
 
 
         }

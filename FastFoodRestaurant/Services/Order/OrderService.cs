@@ -29,7 +29,7 @@ namespace FastFoodRestaurant.Services.Order
             var clientOrders = data.Orders.Where(x => x.Client.Id == userId);
             if (item == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentNullException();
             }
 
             if (userId == null)

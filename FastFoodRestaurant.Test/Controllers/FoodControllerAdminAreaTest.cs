@@ -2,6 +2,7 @@
 using MyTested.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +49,8 @@ namespace FastFoodRestaurant.Test.Controllers
                   .AndAlso()
                   .ShouldReturn()
                   .Redirect("/");
+
+            File.Delete($"{WebConstants.Image.UploadDirectory}/{FoodFormModelWIthData.Image.FileName}");
         }
 
         [Theory]

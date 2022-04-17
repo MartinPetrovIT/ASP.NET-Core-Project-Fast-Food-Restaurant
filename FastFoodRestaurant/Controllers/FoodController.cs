@@ -18,9 +18,18 @@ namespace FastFoodRestaurant.Controllers
         public IActionResult All([FromQuery]FoodSearchModel query)
         {
             
-            var foodSearchModel = foods.All(query.SearchTerm, query.Category, query.Sorting, query.CurrentPage);
+            var foodSearchModel = foods.All(
+                query.SearchTerm, 
+                query.Category, 
+                query.Sorting, 
+                query.CurrentPage);
 
-            return View(foodSearchModel);
+            query.Food = foodSearchModel.Food;
+            query.TotalFood = foodSearchModel.TotalFood;
+            query.Categories = foodSearchModel.Categories;
+
+
+            return View(query);
         }
 
     }

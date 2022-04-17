@@ -15,7 +15,7 @@ namespace FastFoodRestaurant.Services.Image
             if (img != null)
             {
                 string uploadDir = WebConstants.Image.UploadDirectory;
-                fileName = Guid.NewGuid().ToString() + "-" + img.FileName;
+                fileName = img.FileName;
                 string path = Path.Combine(uploadDir, fileName);
 
                 using (var fileStream = new FileStream(path, FileMode.Create))
@@ -54,3 +54,5 @@ namespace FastFoodRestaurant.Services.Image
         }
     }
 }
+
+                //fileName = Guid.NewGuid().ToString() + "-" + img.FileName;

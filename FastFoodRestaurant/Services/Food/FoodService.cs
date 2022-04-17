@@ -27,11 +27,11 @@ namespace FastFoodRestaurant.Services.Food
         }
         
         public FoodSearchModel All(
-            string searchTerm,
-            string category,
-            FoodSorting foodSorting,
-            int currentPage ,
-            int entityPerPage)
+            string searchTerm = null,
+            string category = null,
+            FoodSorting foodSorting = FoodSorting.None,
+            int currentPage = 1,
+            int entityPerPage = 4)
         {
 
             var foodQuery = data.Foods.AsQueryable();
@@ -55,9 +55,9 @@ namespace FastFoodRestaurant.Services.Food
             {
                 FoodSorting.PriceAcsending => foodQuery.OrderBy(x => x.Price),
                 FoodSorting.PriceDescending => foodQuery.OrderByDescending(x => x.Price),
-                _ => foodQuery
-
+                FoodSorting.None or _ => foodQuery
             };
+
 
             var totalFood = foodQuery.Count();
 
